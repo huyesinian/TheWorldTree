@@ -2,25 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TheWorldTree.Models;
 
 namespace TheWorldTree.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly RedisAction Redis = new RedisAction();
+        private readonly IHttpContextAccessor httpContextAccessor;
+
         public IActionResult Index()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Login(string UserName, string Password)
+        public JsonResult Login(string userName, string passWord)
         {
-            //这里获取用户名和密码之后，到redis里面去匹配，并且生成相应的SessionID，添加到redis中
-
-            //这里设置相关的IP限制登陆节点，防止被攻击
-
-
-            return View();
+            var userIP = new IPAddressController(httpContextAccessor).Get().ToString();
+            var selResult = Redis.GetClientIPNum(userIP);
+            if (selResult.Length > 0)
+            {
+                return Json(selResult);
+            }
+            if (Redis.GetLoginResult(userName) == passWord)
+            {
+                HttpContext.Session.SetString(userName, Guid.NewGuid().ToString());
+                return Json(1);
+            }
+            else
+            {
+                Redis.UpdateClientIPErrorNum(userIP);
+                Redis.SetClientIPDeadLine(userIP);
+                return Json("指令配对失败");
+            }
         }
     }
 }
