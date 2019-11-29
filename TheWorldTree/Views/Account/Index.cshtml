@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lowin</title>
+    <link href="~/loginconfig/auth.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+
+<body>
+    <div class="lowin">
+        <div class="lowin-brand">
+            <img src="~/loginconfig/kodinger.jpg" alt="logo"/>
+        </div>
+        <div class="lowin-wrapper">
+            <div class="lowin-box lowin-login">
+                <div class="lowin-box-inner">
+                    <form>
+                        <p id="tips">Sign in to continue</p>
+                        <div class="lowin-group">
+                            <label>Name</label>
+                            <input type="text" autocomplete="text" name="name" id="name" class="lowin-input">
+                        </div>
+                        <div class="lowin-group password-group">
+                            <label>Password</label>
+                            <input type="password" name="password" id="password" autocomplete="current-password" class="lowin-input">
+                        </div>
+                        <a class="lowin-btn" id="Login">
+                            指令配对
+                        </a>
+
+                       
+                    </form>
+                </div>
+            </div>
+
+           
+        </div>
+
+      
+    </div>
+    <script src="~/loginconfig/auth.js" charset="gb2312"></script>
+   
+</body>
+</html>
