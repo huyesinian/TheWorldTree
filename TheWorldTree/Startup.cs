@@ -29,7 +29,7 @@ namespace TheWorldTree
         {
             services.AddSession();
             services.AddMvc();
-            services.AddHttpContextAccessor();
+            //services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<TheWorldTreeDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TheWorldTreeeContext")));

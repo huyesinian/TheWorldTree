@@ -11,7 +11,6 @@ namespace TheWorldTree.Controllers
     public class AccountController : Controller
     {
         private readonly RedisAction Redis = new RedisAction();
-        private readonly IHttpContextAccessor httpContextAccessor;
 
         public IActionResult Index()
         {
@@ -20,7 +19,7 @@ namespace TheWorldTree.Controllers
         [HttpPost]
         public JsonResult Login(string userName, string passWord)
         {
-            var userIP = new IPAddressController(httpContextAccessor).Get().ToString();
+            var userIP = HttpContext.Connection.RemoteIpAddress.ToString();//获取用户IP
             var selResult = Redis.GetClientIPNum(userIP);
             if (selResult.Length > 0)
             {
