@@ -30,7 +30,7 @@ namespace TheWorldTree.Controllers
                     IPAccessTime = DateTime.Now,
                     IPAdd = HttpContext.Session.GetString("CurrentUser")
                 };
-              
+                
                 _context.Add(treeIPInfo);
                 _context.SaveChangesAsync();
             }

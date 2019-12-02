@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace TheWorldTree
 {
     public class Startup
     {
+        public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,14 +28,16 @@ namespace TheWorldTree
             services.AddMvc();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddDbContext<TheWorldTreeDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TheWorldTreeeContext")));
+            services.AddDbContext<TheWorldTreeDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TheWorldTreeDBContext")));
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-           
+            MigrationDB(app);
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +59,27 @@ namespace TheWorldTree
                     name: "default",
                     pattern: "{controller=Account}/{action=Index}/{id?}");
             });
+        }
+
+        /// <summary>
+        /// 数据库自动迁移
+        /// </summary>
+        /// <param name="app"></param>
+        public void MigrationDB(IApplicationBuilder app)
+        {
+            try
+            {
+                using (var serviceScope =app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope() )
+                {
+                    serviceScope.ServiceProvider.GetService<TheWorldTreeDBContext>().Database.MigrateAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(ex.ToString());
+                NLog.LogManager.Shutdown();
+                throw;
+            }
         }
 
 

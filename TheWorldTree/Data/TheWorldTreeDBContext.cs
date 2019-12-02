@@ -9,14 +9,7 @@ namespace TheWorldTree.Data
 {
     public class TheWorldTreeDBContext : DbContext
     {
-        public TheWorldTreeDBContext(DbContextOptions<TheWorldTreeDBContext> options) : base(options)
-        {
-            if (Database.GetPendingMigrations().Any())
-            {
-                //执行迁移
-                Database.Migrate();
-            }
-        }
+        public TheWorldTreeDBContext(DbContextOptions<TheWorldTreeDBContext> options) : base(options){}
 
 
         public DbSet<TreeIPInfo> TreeIPInfo { get; set; }
