@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheWorldTree.Data;
@@ -15,12 +16,29 @@ namespace TheWorldTree.Controllers
     /// </summary>
     public class HomeController : BaseVerifyController
     {
-        
-       
+
+
 
         public IActionResult Index()
         {
-            
+            ///将用户IP信息记录到数据库中
+            try
+            {
+                var treeIPInfo = new TreeIPInfo
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    IPAccessTime = DateTime.Now,
+                    IPAdd = HttpContext.Session.GetString("CurrentUser")
+                };
+              
+                _context.Add(treeIPInfo);
+                _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(ex.ToString());
+            }
+            ///
             return View();
         }
 

@@ -26,7 +26,8 @@ namespace TheWorldTree.Controllers
         /// <summary>
         /// 数据操作
         /// </summary>
-        public readonly TheWorldTreeDBContext _context;
+        public  TheWorldTreeDBContext _context;
+
 
     }
 }
