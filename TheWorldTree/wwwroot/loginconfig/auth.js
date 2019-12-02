@@ -17,13 +17,7 @@ function LoginSys() {
 	$.post('/Account/Login', { userName: $("#name").val(), passWord: $("#password").val()},
 		function (data) {
 			if (data == "1") {
-				var url = getQueryString("url");
-				if (url != null) {
-					window.location = url;
-				}
-				else {
-					window.location = "/" + $("#local").val() + "/Home/Index";
-				}
+					window.location = "/Home/Index";
 			} else {
 				$("#tips").html(data);
 			}

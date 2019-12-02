@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TheWorldTree.Data;
+
 
 namespace TheWorldTree
 {
@@ -29,16 +24,16 @@ namespace TheWorldTree
         {
             services.AddSession();
             services.AddMvc();
-            //services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<TheWorldTreeDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TheWorldTreeeContext")));
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -53,9 +48,7 @@ namespace TheWorldTree
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -63,5 +56,7 @@ namespace TheWorldTree
                     pattern: "{controller=Account}/{action=Index}/{id?}");
             });
         }
+
+
     }
 }

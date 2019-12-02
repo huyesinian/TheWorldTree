@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TheWorldTree.Models;
 
 namespace TheWorldTree.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly RedisAction Redis = new RedisAction();
+       
 
         public IActionResult Index()
         {
             return View();
         }
+
         [HttpPost]
         public JsonResult Login(string userName, string passWord)
         {
+            
             var userIP = HttpContext.Connection.RemoteIpAddress.ToString();//获取用户IP
             var selResult = Redis.GetClientIPNum(userIP);
             if (selResult.Length > 0)
@@ -27,7 +25,7 @@ namespace TheWorldTree.Controllers
             }
             if (Redis.GetLoginResult(userName) == passWord)
             {
-                HttpContext.Session.SetString(userName, Guid.NewGuid().ToString());
+                HttpContext.Session.SetString("CurrentUser", Guid.NewGuid().ToString());
                 return Json(1);
             }
             else

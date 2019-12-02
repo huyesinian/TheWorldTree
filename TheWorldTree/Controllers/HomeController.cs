@@ -10,18 +10,17 @@ using TheWorldTree.Models;
 
 namespace TheWorldTree.Controllers
 {
-    public class HomeController : Controller
+    /// <summary>
+    /// 主页
+    /// </summary>
+    public class HomeController : BaseVerifyController
     {
-        //private readonly ILogger<HomeController> _logger;
-
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
-        //private readonly TheWorldTreeDBContext _context;
+        
+       
 
         public IActionResult Index()
         {
+            
             return View();
         }
 
@@ -35,5 +34,7 @@ namespace TheWorldTree.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
