@@ -23,11 +23,6 @@ namespace TheWorldTree.Controllers
         /// </summary>
         public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// 数据操作
-        /// </summary>
-        public  TheWorldTreeDBContext _context;
-
-
+       
     }
 }

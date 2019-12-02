@@ -17,6 +17,12 @@ namespace TheWorldTree.Controllers
     public class HomeController : BaseVerifyController
     {
 
+        
+        public TheWorldTreeDBContext _context;
+        public HomeController(TheWorldTreeDBContext context)
+        {
+            _context = context;
+        }
 
 
         public IActionResult Index()
