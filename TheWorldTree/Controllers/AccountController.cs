@@ -33,7 +33,6 @@ namespace TheWorldTree.Controllers
             else
             {
                 Redis.UpdateClientIPErrorNum(userIP);
-                Redis.SetClientIPDeadLine(userIP);
                 return Json("指令配对失败");
             }
         }

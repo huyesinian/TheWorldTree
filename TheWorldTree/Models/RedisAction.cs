@@ -35,7 +35,7 @@ namespace TheWorldTree.Models
         {
             var redis = redisManger.GetClient();
             var num = int.Parse(redis.Get<string>(userIP) ?? "0");
-            return num >= 3 ? "当前IP错误登录次数以达到今日上限" : "";
+            return num >= 3 ? "当前IP错误登录次数以达到今日上限,限制登陆" : "";
         }
 
         /// <summary>
@@ -46,8 +46,14 @@ namespace TheWorldTree.Models
         public void UpdateClientIPErrorNum(string userIP)
         {
             var redis = redisManger.GetClient();
-            var num = int.Parse(redis.Get<string>(userIP) ?? "0");
-            redis.Set(userIP, num + 1);
+            var num = int.Parse(redis.Get<string>(userIP) ?? "0")+1;
+            redis.Set(userIP, num);
+            if (num >= 3)
+            {
+                SetClientIPDeadLine(userIP);
+            }
+
+
         }
 
         /// <summary>
