@@ -17,7 +17,6 @@ namespace TheWorldTree.Controllers
     public class HomeController : BaseVerifyController
     {
 
-        
         public TheWorldTreeDBContext _context;
         public HomeController(TheWorldTreeDBContext context)
         {
@@ -45,6 +44,9 @@ namespace TheWorldTree.Controllers
                 Logger.Info(ex.ToString());
             }
             ///
+
+            ///查询需要在首页显示的图表数据
+            
             return View();
         }
 

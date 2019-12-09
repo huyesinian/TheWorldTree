@@ -1,4 +1,101 @@
 ﻿@{
     ViewData["Title"] = "主页";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+<div class="layui-fluid" style="height:100%;width:100%;">
+    <div class="layui-row layui-col-space10" style="margin-top:1%">
+        <div class="layui-col-md9">
+            <div class="grid-demo grid-demo-bg1" style="background-color: bisque; height: 32%;">
+                <div id="popularity" style="height:100%;"></div>
+            </div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="grid-demo" style="background-color:#9b8991;height:32%;">
+                <div style="height:100%;"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-row layui-col-space1" style="margin-top:1%">
+        <div class="layui-col-md3">
+            <div class="grid-demo grid-demo-bg1" style="background-color:#808080;height:32%;">
+                1/4
+            </div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="grid-demo" style="background-color:#ff6a00;height:32%;">1/4</div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="grid-demo grid-demo-bg1" style="background-color:#ffd800;height:32%;">1/4</div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="grid-demo" style="background-color:#b6ff00;height:32%;">1/4</div>
+        </div>
+    </div>
+
+    <div class="layui-row layui-col-space10" style="margin:1% 0 1% 0">
+        <div class="layui-col-md9">
+            <div class="grid-demo grid-demo-bg1" style="background-color: bisque; height: 32%;">9/12</div>
+        </div>
+        <div class="layui-col-md3">
+            <div class="grid-demo" style="background-color:#9b8991;height:32%;">3/12</div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var dom = document.getElementById("popularity");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    app.title = '坐标轴刻度与标签对齐';
+
+    option = {
+        title: {
+            text: '本年度每月访问人数',
+            subtext: 'Monthly visitors this year'
+        },
+        color: ['#3398DB'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '直接访问',
+                type: 'bar',
+                barWidth: '60%',
+                data: [10, 52, 200, 334, 390, 330, 220, 52, 200, 334, 390, 330, 220]
+            }
+        ]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>

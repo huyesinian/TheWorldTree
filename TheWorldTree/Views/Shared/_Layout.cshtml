@@ -1,10 +1,13 @@
-﻿<!DOCTYPE html>
+﻿
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>@ViewData["Title"] - TheWorldTree</title>
     <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/echarts.min.js"></script>
+   
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
@@ -25,6 +28,8 @@
                 </li>
             </ul>
             <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">
                         <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
@@ -68,16 +73,15 @@
 
         <div class="layui-body">
             <!-- 内容主体区域 -->
-           @RenderBody()
+            @RenderBody()
         </div>
 
-        <div class="layui-footer">
+        <div class="layui-footer" style="text-align:center">
             <!-- 底部固定区域 -->
             © TheWorldTree.com
         </div>
     </div>
     <script src="~/lib/layui/layui.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script>
         //JavaScript代码区域
         layui.use('element', function () {
