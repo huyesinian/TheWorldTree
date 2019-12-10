@@ -7,7 +7,7 @@
     <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/echarts.min.js"></script>
-   
+    <script src="~/lib/layui/layui.js"></script>
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
@@ -16,7 +16,7 @@
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item"><a href="">主页</a></li>
-                <li class="layui-nav-item"><a href="">成就</a></li>
+                <li class="layui-nav-item"><a href="@Url.Action("Index","Press")">成就</a></li>
                 <li class="layui-nav-item"><a href="">关于</a></li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">详细信息</a>
@@ -81,7 +81,7 @@
             © TheWorldTree.com
         </div>
     </div>
-    <script src="~/lib/layui/layui.js"></script>
+  
     <script>
         //JavaScript代码区域
         layui.use('element', function () {

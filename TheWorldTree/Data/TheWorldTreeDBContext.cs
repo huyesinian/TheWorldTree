@@ -14,5 +14,13 @@ namespace TheWorldTree.Data
 
         public DbSet<TreeIPInfo> TreeIPInfo { get; set; }
 
+        public DbSet<TreeCatalos> TreeCatalos { get; set; }
+
+        public DbSet<TreeFileSuffixType> TreeFileSuffixType { get; set; }
+
+        public DbSet<TreeFileInfo> TreeFileInfo { get; set; }
+
+        public DbSet<TreePress> TreePress { get; set; }
+
     }
 }

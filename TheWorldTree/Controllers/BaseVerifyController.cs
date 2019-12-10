@@ -14,8 +14,7 @@ namespace TheWorldTree.Controllers
         /// <param name="filterContext"></param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            byte[] result;
-            filterContext.HttpContext.Session.TryGetValue("CurrentUser", out result);
+            filterContext.HttpContext.Session.TryGetValue("CurrentUser", out byte[] result);
             if (result == null)
             {
                 filterContext.Result = new RedirectResult("/Account/Index");

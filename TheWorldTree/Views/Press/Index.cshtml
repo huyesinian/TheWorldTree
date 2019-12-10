@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "新闻";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="TableSearch" style="margin-top:20px;">
+    搜索标题：
+    <div class="layui-inline">
+        <input class="layui-input" name="Title" id="TitleReload" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+<table class="layui-hide" id="List" lay-filter="user"></table>
+
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  //方法级渲染
+    table.render({
+
+    elem: '#List'
+        , url: '@Url.Action("GetList")'
+        , response: {
+            statusName: 'StateCode' //规定数据状态的字段名称，默认：code
+            , statusCode: 0 //规定成功的状态码，默认：0
+            , msgName: 'Msg' //规定状态信息的字段名称，默认：msg
+            , countName: 'Count' //规定数据总数的字段名称，默认：count
+            , dataName: 'Data' //规定数据列表的字段名称，默认：data
+        }
+      , parseData: function (res) { //res 即为原始返回的数据
+          return {
+              "StateCode": res.StateCode, //解析接口状态
+              "Msg": res.Msg, //解析提示文本
+              "Count": res.Count, //解析数据长度
+              "Data": res.Data //解析数据列表
+          };
+      }
+    ,cols: [[
+      {checkbox: true, fixed: true}
+      ,{ field:'ID', title: 'ID', width:80, sort: true, fixed: true}
+      ,{ field: 'Title', title: '标题', width: 80, sort: true}
+      ,{ field:'Description', title: '描述', width:200}
+      ,{ field: 'Issue', title: '是否发布', width: 80 }
+
+    ]]
+    ,id: 'testReload'
+    ,page: true
+    ,height: 'full-140'
+  });
+
+  var $ = layui.$, active = {
+    reload: function(){
+          var titleReload = $('#TitleReload');
+
+      //执行重载
+      table.reload('testReload', {
+        page: {
+          curr: 1 //重新从第 1 页开始
+        }
+        ,where: {
+          key: {
+                id: titleReload.val()
+          }
+        }
+      }, 'data');
+    }
+  };
+
+    $('.TableSearch .layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
