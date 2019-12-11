@@ -18,5 +18,31 @@ namespace TheWorldTree.Interface
         /// <param name="s">参数</param>
         /// <returns></returns>
         public string GetJsonList<T>() where T : class;
+
+
+        /// <summary>
+        /// 创建
+        /// </summary>
+        /// <typeparam name="T">实体类</typeparam>
+        /// <param name="s">实体参数</param>
+        /// <returns></returns>
+        public int Create<T>(T s) where T : class;
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <typeparam name="T">实体类</typeparam>
+        /// <param name="s">实体参数</param>
+        /// <returns></returns>
+        public int Edit<T>(T s) where T : class;
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public int Delete<T>(T s);
+
     }
 }

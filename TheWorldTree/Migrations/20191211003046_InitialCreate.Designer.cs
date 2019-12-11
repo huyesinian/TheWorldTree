@@ -10,7 +10,7 @@ using TheWorldTree.Data;
 namespace TheWorldTree.Migrations
 {
     [DbContext(typeof(TheWorldTreeDBContext))]
-    [Migration("20191210074716_InitialCreate")]
+    [Migration("20191211003046_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
