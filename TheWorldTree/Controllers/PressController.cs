@@ -33,5 +33,20 @@ namespace TheWorldTree.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            TreePress press = new TreePress();
+            return View(press);
+        }
+
+        [HttpPost]
+        public JsonResult Create(TreePress press)
+        {
+
+            return Json(1);
+        }
+
+
     }
 }
