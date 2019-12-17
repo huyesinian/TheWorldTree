@@ -50,11 +50,11 @@ namespace TheWorldTree.Controllers
                 {
                     if (Rubbish.Create(press) == 0)
                     {
-                        return Json(JsonHandler.CreateMessage(0, Resource.InsertFail + ErrorCol));
+                        return Json(JsonHandler.CreateMessage(0, ""));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, Resource.InsertFail + ErrorCol));
+                        return Json(JsonHandler.CreateMessage(1, ""));
                     }
                 }
                 catch (Exception)
