@@ -24,6 +24,21 @@ namespace TheWorldTree.Data
             _context = context;
         }
 
+        public int Create<T>(T s) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Delete<T>(T s)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Edit<T>(T s) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 获取json结果集
         /// </summary>

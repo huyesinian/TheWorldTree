@@ -34,7 +34,6 @@ layui.use('table', function(){
   var table = layui.table;
   //方法级渲染
     table.render({
-
     elem: '#List'
         , url: '@Url.Action("GetList")'
         , response: {
@@ -44,13 +43,14 @@ layui.use('table', function(){
             , countName: 'Count' //规定数据总数的字段名称，默认：count
             , dataName: 'Data' //规定数据列表的字段名称，默认：data
         }
-      , parseData: function (res) { //res 即为原始返回的数据
-          return {
-              "StateCode": 0, //解析接口状态
-              "Msg": "", //解析提示文本
-              "Count": 0, //解析数据长度
-              "Data": res.Data //解析数据列表
-          };
+        , parseData: function (res) { //res 即为原始返回的数据
+            var jdata = JSON.parse(res);
+            return {
+                "StateCode": jdata.StateCode, //解析接口状态
+                "Msg": jdata.Msg, //解析提示文本
+                "Count": jdata.Count, //解析数据长度
+                "Data": jdata.Data //解析数据列表
+            };
       }
     ,cols: [[
       {checkbox: true, fixed: true}
