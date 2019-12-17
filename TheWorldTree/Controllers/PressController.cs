@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Apps.Common;
 using Microsoft.AspNetCore.Mvc;
 using TheWorldTree.Data;
 using TheWorldTree.Models;
@@ -43,8 +44,29 @@ namespace TheWorldTree.Controllers
         [HttpPost]
         public JsonResult Create(TreePress press)
         {
+            if (press != null && ModelState.IsValid)
+            {
+                try
+                {
+                    if (Rubbish.Create(press) == 0)
+                    {
+                        return Json(JsonHandler.CreateMessage(0, Resource.InsertFail + ErrorCol));
+                    }
+                    else
+                    {
+                        return Json(JsonHandler.CreateMessage(1, Resource.InsertFail + ErrorCol));
+                    }
+                }
+                catch (Exception)
+                {
 
+                    throw;
+                }
+               
+            }
             return Json(1);
+           
+           
         }
 
 
