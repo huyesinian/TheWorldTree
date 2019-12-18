@@ -1,0 +1,23 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>@ViewData["Title"] - TheWorldTree</title>
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/echarts.min.js"></script>
+    <script src="~/lib/layui/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+    @RenderBody()
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -17,9 +17,9 @@
                     <input class="layui-input" name="Title" id="TitleReload" autocomplete="off">
                 </div>
                 <button class="layui-btn" data-type="reload">搜索</button>
-                <button class="layui-btn layui-btn-normal" data-type="tabAdd" >新增</button>
-                <button class="layui-btn layui-btn-warm" data-type="tabEdit" >修改</button>
-                <button class="layui-btn layui-btn-danger" data-type="tabDelete">删除</button>
+                <button class="layui-btn btn-active layui-btn-normal" data-type="tabAdd" >新增</button>
+                <button class="layui-btn btn-active layui-btn-warm" data-type="tabEdit" >修改</button>
+                <button class="layui-btn btn-active layui-btn-danger" data-type="tabDelete">删除</button>
             </div>
             <table class="layui-hide" id="List" lay-filter="user"></table>
         </div>
@@ -30,89 +30,88 @@
 
 
 <script>
-layui.use('table', function(){
-  var table = layui.table;
-  //方法级渲染
-    table.render({
-    elem: '#List'
-        , url: '@Url.Action("GetList")'
-        , response: {
-            statusName: 'StateCode' //规定数据状态的字段名称，默认：code
-            , statusCode: 0 //规定成功的状态码，默认：0
-            , msgName: 'Msg' //规定状态信息的字段名称，默认：msg
-            , countName: 'Count' //规定数据总数的字段名称，默认：count
-            , dataName: 'Data' //规定数据列表的字段名称，默认：data
-        }
-        , parseData: function (res) { //res 即为原始返回的数据
-            var jdata = JSON.parse(res);
-            return {
-                "StateCode": jdata.StateCode, //解析接口状态
-                "Msg": jdata.Msg, //解析提示文本
-                "Count": jdata.Count, //解析数据长度
-                "Data": jdata.Data //解析数据列表
-            };
-      }
-    ,cols: [[
-      {checkbox: true, fixed: true}
-      ,{ field:'ID', title: 'ID', width:100, sort: true, fixed: true}
-      ,{ field: 'Title', title: '标题', width: 100, sort: true}
-      ,{ field:'Description', title: '描述', width:300}
-        , { field: 'Issue', title: '是否发布', width: 100, sort: true }
+    layui.use('table', function () {
+        var table = layui.table;
+        //方法级渲染
+        table.render({
+            elem: '#List'
+            , url: '@Url.Action("GetList")'
+            , response: {
+                statusName: 'StateCode' //规定数据状态的字段名称，默认：code
+                , statusCode: 0 //规定成功的状态码，默认：0
+                , msgName: 'Msg' //规定状态信息的字段名称，默认：msg
+                , countName: 'Count' //规定数据总数的字段名称，默认：count
+                , dataName: 'Data' //规定数据列表的字段名称，默认：data
+            }
+            , parseData: function (res) { //res 即为原始返回的数据
+                var jdata = JSON.parse(res);
+                return {
+                    "StateCode": jdata.StateCode, //解析接口状态
+                    "Msg": jdata.Msg, //解析提示文本
+                    "Count": jdata.Count, //解析数据长度
+                    "Data": jdata.Data //解析数据列表
+                };
+            }
+            , cols: [[
+                { checkbox: true, fixed: true }
+                , { field: 'ID', title: 'ID', width: 100, sort: true, fixed: true }
+                , { field: 'Title', title: '标题', width: 100, sort: true }
+                , { field: 'Description', title: '描述', width: 300 }
+                , { field: 'Issue', title: '是否发布', width: 100, sort: true }
 
-    ]]
-    ,id: 'testReload'
-    ,page: true
-    ,height: 'full-140'
-  });
-
-  var $ = layui.$, active = {
-    reload: function(){
-          var titleReload = $('#TitleReload');
-
-      //执行重载
-      table.reload('testReload', {
-        page: {
-          curr: 1 //重新从第 1 页开始
-        }
-        ,where: {
-          key: {
-                id: titleReload.val()
-          }
-        }
-      }, 'data');
-    }
-  };
-
-    $('.TableSearch .layui-btn').on('click', function(){
-    var type = $(this).data('type');
-    active[type] ? active[type].call(this) : '';
-  });
-});
-
-layui.use('element', function () {
-    var $ = layui.jquery
-        , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-    //触发事件
-    var active = {
-        tabAdd: function () {
-            //新增一个Tab项
-            element.tabAdd('Press', {
-                title: '添加'
-                , content: '@Url.Action("Create")'
-                , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-        }
-        , tabEdit: function (othis) {
-             element.tabAdd('Press', {
-                title: '修改'
-                , content: '@Url.Action("Edit")'
-                , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-        }
-    };
-    $('.site-demo-active').on('click', function () {
-        var othis = $(this), type = othis.data('type');
-        active[type] ? active[type].call(this, othis) : '';
+            ]]
+            , id: 'testReload'
+            , page: true
+            , height: 'full-140'
+        });
+        var $ = layui.$, active = {
+            reload: function () {
+                var titleReload = $('#TitleReload');
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        key: {
+                            id: titleReload.val()
+                        }
+                    }
+                }, 'data');
+            }
+        };
+        $('.TableSearch .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
     });
-});
+
+    layui.use('element', function () {
+        var $ = layui.jquery
+            , element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
+        //触发事件
+        var ifra = '<iframe scrolling="yes" frameborder="0" src="' + "@Url.Action("Create")" + '" style="width:100%;height:100%"></iframe>';
+        var active = {
+            tabAdd: function () {
+                //新增一个Tab项
+                element.tabAdd('Press', {
+                    title: '添加'
+                    , content: ifra
+                 @*, content: '@Url.Action("Create")'*@
+                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
+            }
+            , tabEdit: function (othis) {
+                element.tabAdd('Press', {
+                    title: '修改'
+                    , content: '@Url.Action("Edit")'
+                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
+            }
+        };
+        $('.btn-active').on('click', function () {
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
 </script>

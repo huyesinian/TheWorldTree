@@ -79,6 +79,17 @@ namespace TheWorldTree.Data
             return output;
         }
 
+        /// <summary>
+        /// 获取数据集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<T> GetList<T>() where T : class
+        {
+            return   _context.Set<T>().ToList();
+        }
+
 
     }
 }

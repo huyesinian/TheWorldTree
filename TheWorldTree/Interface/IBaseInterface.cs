@@ -19,7 +19,6 @@ namespace TheWorldTree.Interface
         /// <returns></returns>
         public string GetJsonList<T>() where T : class;
 
-
         /// <summary>
         /// 创建
         /// </summary>
@@ -43,6 +42,13 @@ namespace TheWorldTree.Interface
         /// <param name="s"></param>
         /// <returns></returns>
         public int Delete<T>(T s);
+
+        /// <summary>
+        /// 查询集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<T> GetList<T>() where T : class;
 
     }
 }
