@@ -39,7 +39,10 @@ namespace TheWorldTree.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            TreePress press = new TreePress();
+            TreePress press = new TreePress()
+            {
+                ID = Guid.NewGuid().ToString()
+            };
             return View(press);
         }
 
