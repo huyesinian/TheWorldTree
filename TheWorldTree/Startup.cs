@@ -33,11 +33,19 @@ namespace TheWorldTree
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TheWorldTreeDBContext db)
         {
-            //自动迁移并创建数据库
-            MigrationDB(app);
+            try
+            {
+                Logger.Info("开始自动迁移");
+                db.Database.Migrate();
+                Logger.Info("结束自动迁移");
+            }
+            catch (Exception ex)
+            {
 
+                Logger.Info(ex.ToString());
+            }
 
             if (env.IsDevelopment())
             {
@@ -63,27 +71,7 @@ namespace TheWorldTree
         }
 
 
-        /// <summary>
-        /// 数据库自动迁移
-        /// </summary>
-        /// <param name="app"></param>
-        public void MigrationDB(IApplicationBuilder app)
-        {
-            try
-            {
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                {
-                    serviceScope.ServiceProvider.GetService<TheWorldTreeDBContext>().Database.Migrate();
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Info(ex.ToString());
-                NLog.LogManager.Shutdown();
-                throw;
-            }
-        }
+       
 
     }
 }

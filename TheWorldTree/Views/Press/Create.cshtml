@@ -7,7 +7,7 @@
 
 
 <form class="layui-form">
-    @Html.HiddenFor(x=>x.ID)
+    @Html.HiddenFor(x => x.ID)
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Title)
         <div class="layui-input-block">
@@ -21,14 +21,13 @@
         </div>
     </div>
     <div class="layui-form-item">
-        @Html.TextareaLayuiFor(x => x.MainBody)
-    </div>
-
-    <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Issue)
         <div class="layui-input-block">
             @Html.SwitchLayuiFor(x => x.Issue)
         </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.TextareaLayuiFor(x => x.MainBody)
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -50,7 +49,7 @@
         layedit.build('MainBody', {
             height: 300
         }); //建立编辑器
-        layedit.sync(index);
+        layedit.sync('MainBody');
     });
     layui.use('form', function () {
         var form = layui.form;

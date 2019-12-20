@@ -36,15 +36,14 @@ namespace TheWorldTree.Models
         /// 文件长度
         /// </summary>
         [Display(Name = "文件长度")]
-        [MaxLength(100)]
-        public string FileLength { get; set; }
+        public decimal FileLength { get; set; }
 
         /// <summary>
         /// 文件大小
         /// </summary>
         [Display(Name = "文件大小")]
-        [MaxLength(100)]
-        public string FileSize { get; set; }
+        public decimal FileSize { get; set; }
+
 
         /// <summary>
         /// 文件路径
