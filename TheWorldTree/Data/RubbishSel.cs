@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiceStack;
 using TheWorldTree.Interface;
@@ -90,6 +91,14 @@ namespace TheWorldTree.Data
             return   _context.Set<T>().ToList();
         }
 
+        public string UrlConvertor(string strUrl)
+        {
+            string tmpRootDir = Assembly.GetEntryAssembly().Location;
+            string urlPath = strUrl.Replace(tmpRootDir, ""); //转换成相对路径
+            urlPath = urlPath.Replace(@"/", @"/");
+            return urlPath;
 
+
+        }
     }
 }

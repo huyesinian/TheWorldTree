@@ -42,8 +42,9 @@ namespace TheWorldTree.Controllers
                     {
                         var filePath = _config.GetSection("UploadUrl").Value + DateTime.Now.ToString("yyyy-MM-dd") + "/" + contentId + "/";
                         Directory.CreateDirectory(filePath);
+                        filePath += formFile.FileName;
                         //var filePath = Path.GetTempFileName();//这里的路径可以通过配置文件进行修改,合成路径
-                        using (var stream = System.IO.File.Create(filePath + formFile.FileName))
+                        using (var stream = System.IO.File.Create(filePath))
                         {
                             await formFile.CopyToAsync(stream);
                             var TreeF = new TreeFileInfo()
@@ -56,18 +57,26 @@ namespace TheWorldTree.Controllers
                                 FileLength = formFile.Length,
                                 Expanded_name = formFile.FileName.Substring(formFile.FileName.LastIndexOf(".")),
                                 FilePath = filePath,
-                                Creater="",
+                                FileRelPath= Rubbish.UrlConvertor(filePath),
+                                Creater ="",
                                 CreateTime=DateTime.Now
                             };
                             var imgI = new ImgInfo()
                             {
-                                url = filePath + formFile.FileName,
+                                url = TreeF.FileRelPath,
                                 title = ""
                             };
                             imgs.Add(imgI);
-                            if (Rubbish.Create(TreeF) == 0)
+                            if (Rubbish.Create(TreeF) == 1)
                             {
-                                return Json(imgs);
+                                JsonImg jsonimg = new JsonImg()
+                                {
+                                    code = 0,
+                                    msg = "",
+                                    data = imgs
+                                };
+                                var jsonresult = JsonConvert.SerializeObject(jsonimg);
+                                return Json(jsonresult);
                             }
 
                         }
@@ -83,18 +92,6 @@ namespace TheWorldTree.Controllers
         }
     }
 
-    public class ImgInfo
-    {
-        /// <summary>
-        /// 路径
-        /// </summary>
-        public string url { get; set; }
-
-        /// <summary>
-        /// 标题
-        /// </summary>
-        public string title { get; set; }
-    }
-
+   
 
 }

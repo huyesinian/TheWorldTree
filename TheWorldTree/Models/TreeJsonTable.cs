@@ -32,6 +32,43 @@ namespace TheWorldTree.Models
         public object Data { get; set; }
     }
 
+    /// <summary>
+    /// 这是富文本框中的上传文件
+    /// </summary>
+    public class JsonImg
+    {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public int code { get; set; }
 
-   
+        /// <summary>
+        /// 异常信息
+        /// </summary>
+        public string msg { get; set; }
+
+        /// <summary>
+        /// 返回的数据
+        /// </summary>
+        public object data { get; set; }
+    }
+
+    /// <summary>
+    /// 真是图上上传之后需要返回的信息
+    /// </summary>
+    public class ImgInfo
+    {
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string url { get; set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string title { get; set; }
+    }
+
+
+
 }

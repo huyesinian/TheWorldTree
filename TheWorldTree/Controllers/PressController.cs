@@ -53,7 +53,7 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (Rubbish.Create(press) == 0)
+                    if (Rubbish.Create(press) == 1)
                     {
                         return Json(JsonHandler.CreateMessage(0, "创建成功"));
                     }
@@ -89,7 +89,7 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (Rubbish.Edit(press) == 0)
+                    if (Rubbish.Edit(press) == 1)
                     {
                         return Json(JsonHandler.CreateMessage(0, "修改成功"));
                     }

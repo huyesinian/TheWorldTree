@@ -22,5 +22,16 @@ namespace TheWorldTree.Data
 
         public DbSet<TreePress> TreePress { get; set; }
 
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TreeIPInfo>().ToTable("TreeIPInfo");
+            modelBuilder.Entity<TreeCatalos>().ToTable("TreeCatalos");
+            modelBuilder.Entity<TreeFileSuffixType>().ToTable("TreeFileSuffixType");
+            modelBuilder.Entity<TreeFileInfo>().ToTable("TreeFileInfo");
+            modelBuilder.Entity<TreePress>().ToTable("TreePress");
+          
+    }
     }
 }
