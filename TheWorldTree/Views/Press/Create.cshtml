@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        @Html.TextareaLayuiFor(x => x.MainBody)
+        @Html.TextareaLayuiFor(x => x.MainBody, "content")
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -37,8 +37,9 @@
 </form>
 
 <script>
-    layui.use('layedit', function () {
+    layui.use(['layer', 'layedit', 'form'], function () {
         var layedit = layui.layedit;
+        var form = layui.form;
         var imgUrl = "@Url.Action("UploadIMG", "UploadFile")?contentId=" + $("#ID").val();
         layedit.set({
             uploadImage: {
@@ -46,14 +47,42 @@
                 , type: 'post' //默认post
             }
         });
-        layedit.build('MainBody', {
-            height: 300
+        var index =layedit.build('MainBody', {
+            height: 500
         }); //建立编辑器
-        layedit.sync('MainBody');
+        form.verify({
+            content: function (value) {
+                return layedit.sync(index);
+            }
+        });
+        form.on('submit(*)', function (data) {
+            //var maintenancePlace = JSON.stringify(data.field);
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'post',
+                dataType: 'json',
+                //contentType: "application/json",
+                data: data.field,
+                success: function (dataResult) {
+                    alert(11111111)
+                }
+            })
+        })
     });
-    layui.use('form', function () {
+     @*layui.use('form', function () {
         var form = layui.form;
-
-        //各种基于事件的操作，下面会有进一步介绍
-    });
+        form.on('submit(*)', function (data) {
+            //var maintenancePlace = JSON.stringify(data.field);
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'post',
+                dataType: 'json',
+                //contentType: "application/json",
+                data: data.field,
+                success: function (dataResult) {
+                    alert(11111111)
+                }
+            })
+        })
+    });*@
 </script>

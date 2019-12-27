@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using TheWorldTree.Data;
 using TheWorldTree.Models;
-
 namespace TheWorldTree.Controllers
 {
     public class UploadFileController : BaseVerifyController
@@ -32,7 +31,6 @@ namespace TheWorldTree.Controllers
 
         public async Task<JsonResult> UploadIMG(IFormFileCollection files, string contentId = null)
         {
-            var imgs = new List<ImgInfo>();
             files = Request.Form.Files;
             try
             {
@@ -40,6 +38,7 @@ namespace TheWorldTree.Controllers
                 {
                     if (formFile.Length > 0)
                     {
+
                         var filePath = _config.GetSection("UploadUrl").Value + DateTime.Now.ToString("yyyy-MM-dd") + "/" + contentId + "/";
                         Directory.CreateDirectory(filePath);
                         filePath += formFile.FileName;
@@ -57,23 +56,27 @@ namespace TheWorldTree.Controllers
                                 FileLength = formFile.Length,
                                 Expanded_name = formFile.FileName.Substring(formFile.FileName.LastIndexOf(".")),
                                 FilePath = filePath,
-                                FileRelPath= Rubbish.UrlConvertor(filePath),
-                                Creater ="",
-                                CreateTime=DateTime.Now
+                                FileRelPath = Rubbish.UrlConvertor(filePath),
+                                Creater = "",
+                                CreateTime = DateTime.Now
                             };
                             var imgI = new ImgInfo()
                             {
-                                url = TreeF.FileRelPath,
+#if DEBUG
+                                src = "https://localhost:44391/" + "/" + TreeF.FileRelPath,
+#else
+                                src = "http://localhost:5241"+"/"+TreeF.FileRelPath,
+#endif
                                 title = ""
                             };
-                            imgs.Add(imgI);
+
                             if (Rubbish.Create(TreeF) == 1)
                             {
                                 JsonImg jsonimg = new JsonImg()
                                 {
                                     code = 0,
                                     msg = "",
-                                    data = imgs
+                                    data = imgI
                                 };
                                 var jsonresult = JsonConvert.SerializeObject(jsonimg);
                                 return Json(jsonresult);
@@ -92,6 +95,6 @@ namespace TheWorldTree.Controllers
         }
     }
 
-   
+
 
 }

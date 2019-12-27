@@ -61,7 +61,7 @@ namespace TheWorldTree.Models
         /// <summary>
         /// 路径
         /// </summary>
-        public string url { get; set; }
+        public string src { get; set; }
 
         /// <summary>
         /// 标题
