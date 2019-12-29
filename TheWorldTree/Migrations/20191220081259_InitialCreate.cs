@@ -48,7 +48,6 @@ namespace TheWorldTree.Migrations
                     Expanded_name = table.Column<string>(maxLength: 50, nullable: false),
                     Content_Type = table.Column<string>(maxLength: 100, nullable: false),
                     FilePath = table.Column<string>(maxLength: 100, nullable: true),
-                    FileRelPath = table.Column<string>(maxLength: 100, nullable: true),
                     Thum_file = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>

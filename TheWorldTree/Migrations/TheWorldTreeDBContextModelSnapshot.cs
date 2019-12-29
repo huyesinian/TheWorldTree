@@ -121,10 +121,6 @@ namespace TheWorldTree.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("FileRelPath")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
                     b.Property<decimal>("FileSize")
                         .HasColumnType("decimal(18, 2)");
 
