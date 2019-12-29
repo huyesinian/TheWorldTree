@@ -49,6 +49,7 @@ namespace TheWorldTree.Controllers
         [HttpPost]
         public JsonResult Create(TreePress press)
         {
+            press.CreateTime = DateTime.Now;
             if (press != null && ModelState.IsValid)
             {
                 try

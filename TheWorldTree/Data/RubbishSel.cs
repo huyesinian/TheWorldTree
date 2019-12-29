@@ -93,12 +93,9 @@ namespace TheWorldTree.Data
 
         public string UrlConvertor(string strUrl)
         {
-            string tmpRootDir = Assembly.GetEntryAssembly().Location;
-            string urlPath = strUrl.Replace(tmpRootDir, ""); //转换成相对路径
-            urlPath = urlPath.Replace(@"/", @"/");
-            return urlPath;
-
-
+            Uri uri1 = new Uri(strUrl);
+            Uri uri2 = new Uri(@"E:\TheWorldTree\TheWorldTree\wwwroot\");
+            return uri2.MakeRelativeUri(uri1).ToString();
         }
     }
 }
