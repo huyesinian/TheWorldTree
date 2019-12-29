@@ -10,7 +10,7 @@ using TheWorldTree.Data;
 namespace TheWorldTree.Migrations
 {
     [DbContext(typeof(TheWorldTreeDBContext))]
-    [Migration("20191220081259_InitialCreate")]
+    [Migration("20191222135544_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,6 +120,10 @@ namespace TheWorldTree.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("FileRelPath")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
