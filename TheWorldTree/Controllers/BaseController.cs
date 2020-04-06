@@ -23,6 +23,16 @@ namespace TheWorldTree.Controllers
         /// </summary>
         public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-       
+
+        /// <summary>
+        /// 获取当前用户
+        /// </summary>
+        /// <returns></returns>
+        public string GetCurrentU()
+        {
+            var user = HttpContext.Connection.RemoteIpAddress.ToString();
+            return user;
+        }
+
     }
 }

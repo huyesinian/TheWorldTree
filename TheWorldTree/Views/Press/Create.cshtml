@@ -6,7 +6,7 @@
 }
 
 
-<form class="layui-form">
+<form class="layui-form" lay-filter="press">
     @Html.HiddenFor(x => x.ID)
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Title)
@@ -31,7 +31,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
         </div>
     </div>
 </form>
@@ -48,41 +48,43 @@
             }
         });
         var index =layedit.build('MainBody', {
-            height: 500
+            height: 400
         }); //建立编辑器
         form.verify({
             content: function (value) {
                 return layedit.sync(index);
             }
         });
+        ///提交数据
         form.on('submit(*)', function (data) {
-            //var maintenancePlace = JSON.stringify(data.field);
             $.ajax({
                 url: '@Url.Action("Create")',
                 type: 'post',
                 dataType: 'json',
-                //contentType: "application/json",
                 data: data.field,
                 success: function (dataResult) {
-                    alert(11111111)
+                    if (dataResult.type == 1) {
+                        layer.msg(dataResult.message);
+                    }
+                    else {
+                        layer.msg(dataResult.message);
+                    }
+
+                },
+                error: function (dataError) {
+                    alert(dataError)
                 }
+
             })
-        })
+        });
+        //监听赋值事件
+        form.on('switch', function () {
+            var val = $('input:checkbox[name="Issue"]:checked').val();
+            if (val == "on") {
+                form.val('press', {
+                    "Issue": "true"
+                });
+            }
+        });
     });
-     @*layui.use('form', function () {
-        var form = layui.form;
-        form.on('submit(*)', function (data) {
-            //var maintenancePlace = JSON.stringify(data.field);
-            $.ajax({
-                url: '@Url.Action("Create")',
-                type: 'post',
-                dataType: 'json',
-                //contentType: "application/json",
-                data: data.field,
-                success: function (dataResult) {
-                    alert(11111111)
-                }
-            })
-        })
-    });*@
 </script>

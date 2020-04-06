@@ -17,7 +17,7 @@ namespace TheWorldTree.Controllers
         public JsonResult Login(string userName, string passWord)
         {
             
-            var userIP = HttpContext.Connection.RemoteIpAddress.ToString();//获取用户IP
+            var userIP = GetCurrentU();//获取用户IP
             var selResult = Redis.GetClientIPNum(userIP);
             if (selResult.Length > 0)
             {

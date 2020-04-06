@@ -23,8 +23,25 @@ namespace TheWorldTree.Controllers
             base.OnActionExecuting(filterContext);
         }
 
-        
 
-       
+        /// <summary>
+        /// 获取实体验证错误信息
+        /// </summary>
+        /// <returns></returns>
+        public string GetEntityError()
+        {
+            var msg = string.Empty;
+            foreach (var value in ModelState.Values)
+            {
+                if (value.Errors.Count > 0)
+                {
+                    foreach (var error in value.Errors)
+                    {
+                        msg = msg + error.ErrorMessage;
+                    }
+                }
+            }
+            return msg;
+        }
     }
 }

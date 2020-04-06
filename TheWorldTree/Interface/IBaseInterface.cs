@@ -12,12 +12,13 @@ namespace TheWorldTree.Interface
     public interface IBaseInterface
     {
         /// <summary>
-        /// 获取结果集
+        /// 获取带分页的结果集
         /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="s">参数</param>
+        /// <typeparam name="T">实体参数</typeparam>
+        /// <param name="p">页数</param>
+        /// <param name="l">每页数据条数</param>
         /// <returns></returns>
-        public string GetJsonList<T>() where T : class;
+        public string GetJsonList<T>(int p, int l) where T : class;
 
         /// <summary>
         /// 创建

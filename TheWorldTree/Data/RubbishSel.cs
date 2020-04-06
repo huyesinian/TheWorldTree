@@ -62,18 +62,29 @@ namespace TheWorldTree.Data
         }
 
         /// <summary>
-        /// 获取json结果集
+        /// 带分页的结果集
         /// </summary>
         /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="p">页数</param>
+        /// <param name="l">页面条数</param>
         /// <returns></returns>
-        public string GetJsonList<T>() where T : class
+        public string GetJsonList<T>(int p, int l) where T : class
         {
             var SelResult = _context.Set<T>().ToList();
+            var pageSum = SelResult.Count();
+            if (p <= 1)
+            {
+                SelResult = SelResult.Take(l).ToList();
+            }
+            else
+            {
+                SelResult = SelResult.Skip((p - 1) * l).Take(l).ToList();
+            }
             TreeJsonTable jsonTable = new TreeJsonTable()
             {
                 StateCode = 0,
                 Msg = "",
-                Count = SelResult.Count(),
+                Count = pageSum,
                 Data = SelResult
             };
             string output = JsonConvert.SerializeObject(jsonTable);
@@ -88,14 +99,20 @@ namespace TheWorldTree.Data
         /// <returns></returns>
         public List<T> GetList<T>() where T : class
         {
-            return   _context.Set<T>().ToList();
+            return _context.Set<T>().ToList();
         }
 
+        /// <summary>
+        /// 替换成相对路径
+        /// </summary>
+        /// <param name="strUrl"></param>
+        /// <returns></returns>
         public string UrlConvertor(string strUrl)
         {
             Uri uri1 = new Uri(strUrl);
             Uri uri2 = new Uri(@"E:\TheWorldTree\TheWorldTree\wwwroot\");
-            return uri2.MakeRelativeUri(uri1).ToString();
+            var url = uri2.MakeRelativeUri(uri1).ToString().Substring(uri2.MakeRelativeUri(uri1).ToString().IndexOf("FileSave"));
+            return url;
         }
     }
 }

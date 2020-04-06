@@ -72,21 +72,18 @@ namespace TheWorldTree.Models
         /// 文件路径
         /// </summary>
         [Display(Name = "文件路径")]
-        [MaxLength(100)]
         public string FilePath { get; set; }
 
         /// <summary>
         /// 文件相对路径
         /// </summary>
         [Display(Name = "文件相对路径")]
-        [MaxLength(100)]
         public string FileRelPath { get; set; }
 
         /// <summary>
         /// 缩略图路径
         /// </summary>
         [Display(Name = "缩略图路径")]
-        [MaxLength(100)]
         public string Thum_file { get; set; }
     }
 }

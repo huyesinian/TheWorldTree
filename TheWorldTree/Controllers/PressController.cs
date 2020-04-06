@@ -4,11 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Apps.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheWorldTree.Data;
 using TheWorldTree.Models;
 
 namespace TheWorldTree.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PressController : BaseVerifyController
     {
         public RubbishSel Rubbish;
@@ -25,12 +29,14 @@ namespace TheWorldTree.Controllers
 
         #region 查询
         /// <summary>
-        /// 获取所有数据
+        /// 列表数
         /// </summary>
+        /// <param name="page">当前页</param>
+        /// <param name="limit">数据条数</param>
         /// <returns></returns>
-        public JsonResult GetList()
+        public JsonResult GetList(int page,int limit)
         {
-            var result = Rubbish.GetJsonList<TreePress>();
+            var result = Rubbish.GetJsonList<TreePress>(page, limit);
             return Json(result);
         }
         #endregion
@@ -49,6 +55,7 @@ namespace TheWorldTree.Controllers
         [HttpPost]
         public JsonResult Create(TreePress press)
         {
+            press.Creater = GetCurrentU();
             press.CreateTime = DateTime.Now;
             if (press != null && ModelState.IsValid)
             {
@@ -70,7 +77,8 @@ namespace TheWorldTree.Controllers
                 }
 
             }
-            return Json(JsonHandler.CreateMessage(1, "创建失败,数据验证未通过"));
+            
+            return Json(JsonHandler.CreateMessage(1, GetEntityError()));
 
         }
         #endregion
@@ -86,6 +94,7 @@ namespace TheWorldTree.Controllers
         [HttpPost]
         public JsonResult Edit(TreePress press)
         {
+            press.UpdateOne= GetCurrentU();
             if (press != null && ModelState.IsValid)
             {
                 try
@@ -106,7 +115,7 @@ namespace TheWorldTree.Controllers
                 }
 
             }
-            return Json(JsonHandler.CreateMessage(1, "修改失败,数据验证未通过"));
+            return Json(JsonHandler.CreateMessage(1, GetEntityError()));
 
         }
         #endregion

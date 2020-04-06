@@ -21,14 +21,10 @@
                 <button class="layui-btn btn-active layui-btn-warm" data-type="tabEdit" >修改</button>
                 <button class="layui-btn btn-active layui-btn-danger" data-type="tabDelete">删除</button>
             </div>
-            <table class="layui-hide" id="List" lay-filter="user"></table>
+            <table class="layui-hide" id="List" ></table>
         </div>
     </div>
 </div>
-
-
-
-
 <script>
     layui.use('table', function () {
         var table = layui.table;
@@ -53,16 +49,16 @@
                 };
             }
             , cols: [[
-                { checkbox: true, fixed: true }
-                , { field: 'ID', title: 'ID', width: 100, sort: true, fixed: true }
-                , { field: 'Title', title: '标题', width: 100, sort: true }
-                , { field: 'Description', title: '描述', width: 300 }
-                , { field: 'Issue', title: '是否发布', width: 100, sort: true }
+                { type: 'checkbox', fixed: 'left' }
+                , { field: 'ID', title: 'ID',  sort: true, fixed: true }
+                , { field: 'Title', title: '标题',  sort: true }
+                , { field: 'Description', title: '描述'}
+                , { field: 'Issue', title: '是否发布', sort: true }
 
             ]]
             , id: 'testReload'
             , page: true
-            , height: 'full-140'
+            //, height: 'full-140'
         });
         var $ = layui.$, active = {
             reload: function () {
@@ -97,7 +93,6 @@
                 element.tabAdd('Press', {
                     title: '添加'
                     , content: ifra
-                 @*, content: '@Url.Action("Create")'*@
                     , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
                 })
             }
