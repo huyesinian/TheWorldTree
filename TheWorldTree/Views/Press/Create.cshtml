@@ -1,7 +1,7 @@
 ﻿@model TheWorldTree.Models.TreePress
 @using TheWorldTree.HtmlExtension;
 @{
-    ViewData["Title"] = "添加";
+    ViewData["Title"] = "添加新闻";
     Layout = "~/Views/Shared/_Layout_Edit.cshtml";
 }
 
@@ -37,8 +37,9 @@
 </form>
 
 <script>
-    layui.use(['layer', 'layedit', 'form'], function () {
+    layui.use(['layer', 'layedit', 'form','element'], function () {
         var layedit = layui.layedit;
+        var element = layui.element;
         var form = layui.form;
         var imgUrl = "@Url.Action("UploadIMG", "UploadFile")?contentId=" + $("#ID").val();
         layedit.set({
@@ -48,7 +49,7 @@
             }
         });
         var index =layedit.build('MainBody', {
-            height: 400
+            //height: 400
         }); //建立编辑器
         form.verify({
             content: function (value) {
@@ -62,12 +63,13 @@
                 type: 'post',
                 dataType: 'json',
                 data: data.field,
-                success: function (dataResult) {
-                    if (dataResult.type == 1) {
-                        layer.msg(dataResult.message);
+                success: function (data) {
+                    if (data.type == 0) {
+                        layer.msg(data.message);
+                        LayUIMethod.TabPageTurnOff();
                     }
                     else {
-                        layer.msg(dataResult.message);
+                        layer.msg(data.message);
                     }
 
                 },

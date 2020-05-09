@@ -26,12 +26,24 @@ namespace TheWorldTree.Data
             _context = context;
         }
 
+        /// <summary>
+        /// 创建
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="s">具体实体</param>
+        /// <returns></returns>
         public int Create<T>(T s) where T : class
         {
             _context.Add(s);
             return _context.SaveChanges();
         }
 
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="s">具体实体</param>
+        /// <returns></returns>
         public int Delete<T>(T s)
         {
             _context.Remove(s);
@@ -41,8 +53,8 @@ namespace TheWorldTree.Data
         /// <summary>
         /// 修改
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="s"></param>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="s">传进来的实体</param>
         /// <returns></returns>
         public int Edit<T>(T s) where T : class
         {
@@ -53,8 +65,16 @@ namespace TheWorldTree.Data
                 if (prop.GetValue(s, null) != null)
                 {
                     if (prop.GetValue(s, null).ToString() == " ")
+                    {
                         _context.Entry(s).Property(prop.Name).CurrentValue = null;
-                    _context.Entry(s).Property(prop.Name).IsModified = true;
+                    }
+                    var keys = _context.Entry(s).Property(prop.Name).Metadata.GetType().GetProperty("Keys");//判断当前字段是否为主键
+                    object value = keys.GetValue(_context.Entry(s).Property(prop.Name).Metadata);
+                    if (value==null)//如果是主键，则跳过修改属性
+                    {
+                        _context.Entry(s).Property(prop.Name).IsModified = true;
+                    }
+                   
                 }
             }
             return _context.SaveChanges();
@@ -67,27 +87,15 @@ namespace TheWorldTree.Data
         /// <typeparam name="T">实体类型</typeparam>
         /// <param name="p">页数</param>
         /// <param name="l">页面条数</param>
+        /// <param name="searchInfo">查询条件</param>
         /// <returns></returns>
-        public string GetJsonList<T>(int p, int l) where T : class
+        public string GetJsonList<T>(int p, int l,string searchInfo) where T : class
         {
-            var SelResult = _context.Set<T>().ToList();
-            var pageSum = SelResult.Count();
-            if (p <= 1)
-            {
-                SelResult = SelResult.Take(l).ToList();
-            }
-            else
-            {
-                SelResult = SelResult.Skip((p - 1) * l).Take(l).ToList();
-            }
-            TreeJsonTable jsonTable = new TreeJsonTable()
-            {
-                StateCode = 0,
-                Msg = "",
-                Count = pageSum,
-                Data = SelResult
-            };
-            string output = JsonConvert.SerializeObject(jsonTable);
+            var SelResult = GetList<T>();
+            var Sum = SelResult.Count();
+            //这里是用来放查询方法的
+            SelResult = GetPagingList(p,l, SelResult);
+            string output = GetJsonResult(Sum, SelResult);
             return output;
         }
 
@@ -100,6 +108,48 @@ namespace TheWorldTree.Data
         public List<T> GetList<T>() where T : class
         {
             return _context.Set<T>().ToList();
+        }
+
+        /// <summary>
+        /// 分页方法
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page">页数</param>
+        /// <param name="limit">条数</param>
+        /// <param name="ts">结果集</param>
+        /// <returns></returns>
+        public List<T> GetPagingList<T>(int page, int limit, List<T> ts)
+        {
+            List<T> resultList;
+            if (page <= 1)
+            {
+                resultList = ts.Take(limit).ToList();
+            }
+            else
+            {
+                resultList = ts.Skip((page - 1) * limit).Take(limit).ToList();
+            }
+            return resultList;
+        }
+
+        /// <summary>
+        /// 返回Json结果字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="totalNum">总条数</param>
+        /// <param name="ts">结果集</param>
+        /// <returns>Json结果字符串</returns>
+        public string GetJsonResult<T>(int totalNum,List<T> ts)
+        {
+            TreeJsonTable jsonTable = new TreeJsonTable()
+            {
+                StateCode = 0,
+                Msg = "",
+                Count = totalNum,
+                Data = ts
+            };
+            string output = JsonConvert.SerializeObject(jsonTable);
+            return output;
         }
 
         /// <summary>

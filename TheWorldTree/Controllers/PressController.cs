@@ -7,19 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheWorldTree.Data;
 using TheWorldTree.Models;
+using System.Reflection;
+using TheWorldTree.EXMethod;
 
 namespace TheWorldTree.Controllers
 {
     /// <summary>
-    /// 
+    /// 新闻
     /// </summary>
     public class PressController : BaseVerifyController
     {
-        public RubbishSel Rubbish;
+        public TreePressEX  treePressEX;
         public TheWorldTreeDBContext _context;
+       
         public PressController(TheWorldTreeDBContext context)
         {
-            Rubbish = new RubbishSel(context);
+            treePressEX= new TreePressEX(context);
             _context = context;
         }
         public IActionResult Index()
@@ -33,10 +36,11 @@ namespace TheWorldTree.Controllers
         /// </summary>
         /// <param name="page">当前页</param>
         /// <param name="limit">数据条数</param>
+        /// <param name="searchInfo">查询条件</param>
         /// <returns></returns>
-        public JsonResult GetList(int page,int limit)
+        public JsonResult GetList(int page,int limit,string searchInfo)
         {
-            var result = Rubbish.GetJsonList<TreePress>(page, limit);
+            var result = treePressEX.GetJsonList(page, limit, searchInfo);
             return Json(result);
         }
         #endregion
@@ -61,7 +65,7 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (Rubbish.Create(press) == 1)
+                    if (treePressEX.Create(press) == 1)
                     {
                         return Json(JsonHandler.CreateMessage(0, "创建成功"));
                     }
@@ -72,7 +76,7 @@ namespace TheWorldTree.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Info(ex.ToString());
+                    Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name+":"+ex.ToString());
                     return Json(JsonHandler.CreateMessage(1, "创建失败" + ex.ToString()));
                 }
 
@@ -87,7 +91,7 @@ namespace TheWorldTree.Controllers
         [HttpGet]
         public IActionResult Edit(string id)
         {
-            TreePress press = Rubbish.GetList<TreePress>().Where(x => x.ID == id).FirstOrDefault();
+            TreePress press = treePressEX.GetList<TreePress>().Where(x => x.ID == id).FirstOrDefault();
             return View(press);
         }
 
@@ -99,7 +103,7 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (Rubbish.Edit(press) == 1)
+                    if (treePressEX.Edit(press) == 1)
                     {
                         return Json(JsonHandler.CreateMessage(0, "修改成功"));
                     }
@@ -110,7 +114,7 @@ namespace TheWorldTree.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Info(ex.ToString());
+                    Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + MethodBase.GetCurrentMethod().Name +":"+ ex.ToString());
                     return Json(JsonHandler.CreateMessage(1, "修改失败" + ex.ToString()));
                 }
 
@@ -128,8 +132,8 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    TreePress press = Rubbish.GetList<TreePress>().Where(x => x.ID == id).FirstOrDefault();
-                    if (Rubbish.Delete(press) == 0)
+                    TreePress press = treePressEX.GetList<TreePress>().Where(x => x.ID == id).FirstOrDefault();
+                    if (treePressEX.Delete(press) == 1)
                     {
 
                         return Json(JsonHandler.CreateMessage(0, "删除成功"));
@@ -141,7 +145,7 @@ namespace TheWorldTree.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Info(ex.ToString());
+                    Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + ex.ToString());
                     return Json(JsonHandler.CreateMessage(1, "删除失败" + ex.ToString()));
                 }
 

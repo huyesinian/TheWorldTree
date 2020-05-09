@@ -1,8 +1,73 @@
-﻿
+﻿@model TheWorldTree.Models.TreePress
+@using TheWorldTree.HtmlExtension;
 @{
     ViewData["Title"] = "修改";
     Layout = "~/Views/Shared/_Layout_Edit.cshtml";
 }
 
-<h1>Edit</h1>
+    <form class="layui-form" lay-filter="press">
+        @Html.HiddenFor(x => x.ID)
+        <div class="layui-form-item">
+            @Html.LabelLayuiFor(x => x.Title)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Title)
+            </div>
+        </div>
+        <div class="layui-form-item">
+            @Html.LabelLayuiFor(x => x.Description)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Description)
+            </div>
+        </div>
+        <div class="layui-form-item">
+            @Html.LabelLayuiFor(x => x.Issue)
+            <div class="layui-input-block">
+                @Html.SwitchLayuiFor(x => x.Issue)
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        </div>
+        <div class="layui-form-item">
+            @Html.TextareaLayuiFor(x => x.MainBody, "content")
+        </div>
+    </form>
+<script>
+    layui.use(['layer', 'layedit', 'form','element'], function () {
+        var layedit = layui.layedit;
+        var element = layui.element;
+        var form = layui.form;
+        var imgUrl = "@Url.Action("UploadIMG", "UploadFile")?contentId=" + $("#ID").val();
+        layedit.set({
+            uploadImage: {
+                url: imgUrl //接口url
+                , type: 'post' //默认post
+            }
+        });
+        var index =layedit.build('MainBody', {}); //建立编辑器
+        form.verify({
+            content: function (value) {
+                return layedit.sync(index);
+            }
+        });
+       
+        //监听赋值事件
+        form.on('switch', function () {
+            var val = $('input:checkbox[name="Issue"]:checked').val();
+            if (val == "on") {
+                form.val('press', {
+                    "Issue": "true"
+                });
+            }
+        });
+        //给表单赋值
+        form.val("press", {
+            "ID": "@Model.ID" // "name": "value"
+            , "Title": "@Model.Title"
+            , "Description": "@Model.Description"
+            , "Issue": "@Model.Issue"
+            , "MainBody": "@Model.MainBody"
 
+        });
+    });
+</script>

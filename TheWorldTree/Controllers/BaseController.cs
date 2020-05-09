@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TheWorldTree.Data;
 using TheWorldTree.Models;
+using System.Reflection;
 
 namespace TheWorldTree.Controllers
 {
@@ -22,7 +23,6 @@ namespace TheWorldTree.Controllers
         /// 日志记录
         /// </summary>
         public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
 
         /// <summary>
         /// 获取当前用户

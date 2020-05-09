@@ -3,7 +3,15 @@
     ViewData["Title"] = "新闻";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 
+        <!-- 这里同样支持 laytpl 语法，如： -->
+        {{#  if(d.auth > 2){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+        {{#  } }}
+    </script>
 
 <div class="layui-tab" lay-filter="Press" lay-allowclose="true">
     <ul class="layui-tab-title">
@@ -18,10 +26,8 @@
                 </div>
                 <button class="layui-btn" data-type="reload">搜索</button>
                 <button class="layui-btn btn-active layui-btn-normal" data-type="tabAdd" >新增</button>
-                <button class="layui-btn btn-active layui-btn-warm" data-type="tabEdit" >修改</button>
-                <button class="layui-btn btn-active layui-btn-danger" data-type="tabDelete">删除</button>
             </div>
-            <table class="layui-hide" id="List" ></table>
+            <table class="layui-hide" id="List" lay-filter="TableList" ></table>
         </div>
     </div>
 </div>
@@ -54,6 +60,7 @@
                 , { field: 'Title', title: '标题',  sort: true }
                 , { field: 'Description', title: '描述'}
                 , { field: 'Issue', title: '是否发布', sort: true }
+                , { fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
 
             ]]
             , id: 'testReload'
@@ -69,9 +76,8 @@
                         curr: 1 //重新从第 1 页开始
                     }
                     , where: {
-                        key: {
-                            id: titleReload.val()
-                        }
+                            searchInfo: titleReload.val()
+                       
                     }
                 }, 'data');
             }
@@ -80,33 +86,101 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
+
+        //监听工具条
+        table.on('tool(TableList)', function (obj) { //注：tool 是工具条事件名，TableList 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    //layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "@Url.Action("Delete")",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { id: data.ID },
+                        success: function (data) {
+                            if (data.type == 0) {
+                                layer.msg("删除成功");
+                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+
+                            }
+                            else {
+                                layer.msg("删除失败");
+                            }
+                        }
+                    });
+
+                });
+            }
+            else if (layEvent === 'edit') { //编辑
+                layer.open({
+                    type:2//这就是定义窗口类型的属性
+                    , title: "编辑"
+                    , shadeClose: true
+                    , shade: 0.3
+                    , offset: "20%"
+                    , area: ['60%', '60%']
+                    , btn: ['确定', '取消']
+                    , content: '@Url.Action("Edit")?id=' + data.ID   //实际开发中传入真实iframe地址
+                    , yes: function (index, layero) {
+                        let submitID = 'LAY-user-front-submit'
+                        let submit = layero.find('iframe').contents().find('#' + submitID);
+                        submit.trigger('click');
+                        
+                        var form = layer.getChildFrame('form', index);//通过该对象可以获取iframe中的dom元素
+                        data.ID = form[0]['ID'].value;
+                        data.Title = form[0]['Title'].value;
+                        data.Description = form[0]['Description'].value;
+                        data.Issue = form[0]['Issue'].value;
+                        data.MainBody = form[0]['MainBody'].value;
+                        $.ajax({
+                            type: 'post',
+                            url: '@Url.Action("Edit")',  //开发时传入真实接口
+                            data: data,
+                            dataType: 'json',
+                            success: function (data) {
+                                layer.msg(data.message);
+                                if (data.type == 0) {
+                                    location.reload();//表格的
+                                }
+                               
+                            },
+                            error: function () {
+                                layer.msg("出现错误");
+                                return false;
+                            }
+                        })
+                        layer.close(index); //关闭弹层
+                    }
+                });
+            }
+        });
     });
 
     layui.use('element', function () {
-        var $ = layui.jquery
-            , element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
+        var $ = layui.jquery, element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
         //触发事件
         var ifra = '<iframe scrolling="yes" frameborder="0" src="' + "@Url.Action("Create")" + '" style="width:100%;height:100%"></iframe>';
         var active = {
             tabAdd: function () {
                 //新增一个Tab项
                 element.tabAdd('Press', {
-                    title: '添加'
+                    title: '添加新闻'
                     , content: ifra
-                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-                })
+                    , id: 'PressCreate'
+                }
+                )
+                element.tabChange('Press', 'PressCreate')//跳转到指定标签页
             }
-            , tabEdit: function (othis) {
-                element.tabAdd('Press', {
-                    title: '修改'
-                    , content: '@Url.Action("Edit")'
-                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-                })
-            }
+
         };
         $('.btn-active').on('click', function () {
             var othis = $(this), type = othis.data('type');
             active[type] ? active[type].call(this, othis) : '';
         });
     });
+
 </script>

@@ -17,8 +17,9 @@ namespace TheWorldTree.Interface
         /// <typeparam name="T">实体参数</typeparam>
         /// <param name="p">页数</param>
         /// <param name="l">每页数据条数</param>
+        /// <param name="searchInfo">查询条件</param>
         /// <returns></returns>
-        public string GetJsonList<T>(int p, int l) where T : class;
+        public string GetJsonList<T>(int p, int l,string searchInfo ) where T : class;
 
         /// <summary>
         /// 创建
@@ -45,11 +46,32 @@ namespace TheWorldTree.Interface
         public int Delete<T>(T s);
 
         /// <summary>
-        /// 查询集合
+        /// 集合
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public List<T> GetList<T>() where T : class;
+
+
+        /// <summary>
+        /// 分页之后的集合
+        /// </summary>
+        /// <typeparam name="T">实体参数</typeparam>
+        /// <typeparam name="page">页数</typeparam>
+        /// <typeparam name="limit">每页数据条数</typeparam>
+        /// <returns>分页之后的集合</returns>
+        public List<T> GetPagingList<T>(int page, int limit,List<T> ts);
+
+
+        /// <summary>
+        /// 返回Json结果字符串
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="totalNum">总数量</param>
+        /// <param name="ts">结果集</param>
+        /// <returns>Json结果字符串</returns>
+        public string GetJsonResult<T>(int totalNum, List<T> ts);
+
 
     }
 }
