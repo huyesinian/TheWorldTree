@@ -19,7 +19,7 @@ namespace TheWorldTree.Models
 
         [MaxLength(50)]
         [Display(Name = "别名")]
-        public string EnglishName { get; set; }
+        public string Alias { get; set; }
 
         [MaxLength(50)]
         [Required]

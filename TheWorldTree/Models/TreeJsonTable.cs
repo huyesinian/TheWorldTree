@@ -69,6 +69,39 @@ namespace TheWorldTree.Models
         public string title { get; set; }
     }
 
+    /// <summary>
+    /// 目录信息
+    /// </summary>
+    public class CatalosInfo
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string id { get; set; }
+
+        /// <summary>
+        /// 目录名称
+        /// </summary>
+        public string text { get; set; }
+
+        /// <summary>
+        /// 图标
+        /// </summary>
+        public string icon { get; set; }
+
+        /// <summary>
+        /// 是否最后一项
+        /// </summary>
+        public int hasChildren { get; set; }
+
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string href { get; set; }
+    }
+
+
+
 
 
 }

@@ -8,6 +8,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/echarts.min.js"></script>
     <script src="~/lib/layui/layui.js"></script>
+    <script src="~/js/hxNav.js"></script>
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
@@ -47,27 +48,32 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;">所有商品</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">列表一</a></dd>
-                            <dd><a href="javascript:;">列表二</a></dd>
-                            <dd><a href="javascript:;">列表三</a></dd>
-                            <dd><a href="">超链接</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">解决方案</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">列表一</a></dd>
-                            <dd><a href="javascript:;">列表二</a></dd>
-                            <dd><a href="">超链接</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item"><a href="">云市场</a></li>
-                    <li class="layui-nav-item"><a href="">发布商品</a></li>
-                </ul>
+                @*<ul class="layui-nav layui-nav-tree" lay-filter="test">
+            <li class="layui-nav-item layui-nav-itemed">
+                <a class="" href="javascript:;">所有商品</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">列表一</a></dd>
+                    <dd><a href="javascript:;">列表二</a></dd>
+                    <dd><a href="javascript:;">列表三</a></dd>
+                    <dd><a href="">超链接</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">解决方案</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">列表一</a></dd>
+                    <dd><a href="javascript:;">列表二</a></dd>
+                    <dd><a href="">超链接</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+            <a href="">云市场</a>
+            </li>
+            <li class="layui-nav-item">
+            <a href="">发布商品</a>
+            </li>
+        </ul>*@
+                <div id="hxNavbar"></div>
             </div>
         </div>
 
@@ -87,6 +93,19 @@
         layui.use('element', function () {
             var element = layui.element;
 
+        });
+        layui.extend({//设置无限下拉框
+            hxNav: '../js/hxNav'  // 根据你自己的目录设置
+        }).use(['element', 'hxNav'], function () {
+            layui.hxNav({
+                element: '#hxNavbar',        // 必须，指定ID
+                url: '@Url.Action("GetJsonResult", "Catalos")',  // 请求后台数据的接口
+                type: 'post',
+                shrink: false,
+                onSelect: function (v) {
+                    console.log(v);
+                }
+            });
         });
     </script>
     @RenderSection("Scripts", required: false)
