@@ -159,6 +159,7 @@ namespace TheWorldTree.Controllers
         [HttpPost]
         public JsonResult GetJsonResult()
         {
+            //这里获取目录
             string CatalosJsonString = treeCatalosEX.GetJsonString();
             return Json(CatalosJsonString);
 
