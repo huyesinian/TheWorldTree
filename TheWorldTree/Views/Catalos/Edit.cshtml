@@ -1,0 +1,110 @@
+﻿@model TheWorldTree.Models.TreeCatalos
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "修改";
+    Layout = "~/Views/Shared/_Layout_Edit.cshtml";
+}
+
+    <form class="layui-form" lay-filter="catalos">
+        @Html.HiddenFor(x => x.ID)
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.Name)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.Name)
+                </div>
+            </div>
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.Alias)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.Alias)
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.Sort)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.Sort)
+                </div>
+            </div>
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.ParentId)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.ParentId)
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.Url)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.Url)
+                </div>
+            </div>
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.Iconic)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.Iconic)
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.IsLast)
+                <div class="layui-input-block">
+                    @Html.SwitchLayuiFor(x => x.IsLast)
+                </div>
+            </div>
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.Enable)
+                <div class="layui-input-block">
+                    @Html.SwitchLayuiFor(x => x.Enable)
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            @Html.LabelLayuiFor(x => x.Remark)
+            <div class="layui-input-block">
+                @Html.TextareaLayuiFor(x => x.Remark)
+            </div>
+
+        </div>
+    </form>
+    <script>
+    layui.use(['layer', 'layedit', 'form','element'], function () {
+        var form = layui.form;
+
+
+        //监听赋值事件
+        form.on('switch', function () {
+            var val = $('input:checkbox[name="Enable"]:checked').val();
+            var val1 = $('input:checkbox[name="IsLast"]:checked').val();
+            if (val == "on") {
+                form.val('catalos', {
+                    "Enable": "true"
+                });
+            }
+            if (val1 == "on") {
+                form.val('catalos', {
+                    "IsLast": "true"
+                });
+            }
+        });
+        //给表单赋值
+        form.val("catalos", {
+            "ID": "@Model.ID" // "name": "value"
+            , "Name": "@Model.Name"
+            , "Alias": "@Model.Alias"
+            , "Sort": "@Model.Sort"
+            , "ParentId": "@Model.ParentId"
+            , "Url": "@Model.Url"
+            , "Iconic": "@Model.Iconic"
+            , "IsLast": "@Model.IsLast"
+            , "Enable": "@Model.Enable"
+            , "Remark": "@Model.Remark"
+        });
+    });
+    </script>

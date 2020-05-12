@@ -1,7 +1,7 @@
 ﻿
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>@ViewData["Title"] - TheWorldTree</title>
     <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
@@ -16,17 +16,17 @@
             <div class="layui-logo">世界树</div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="">主页</a></li>
-                <li class="layui-nav-item"><a href="@Url.Action("Index","Press")">成就</a></li>
-                <li class="layui-nav-item"><a href="">关于</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">详细信息</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="">邮件管理</a></dd>
-                        <dd><a href="">消息管理</a></dd>
-                        <dd><a href="">授权管理</a></dd>
-                    </dl>
-                </li>
+                @*<li class="layui-nav-item"><a href="">主页</a></li>
+                    <li class="layui-nav-item"><a href="@Url.Action("Index","Press")">成就</a></li>
+                    <li class="layui-nav-item"><a href="">关于</a></li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">详细信息</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="">邮件管理</a></dd>
+                            <dd><a href="">消息管理</a></dd>
+                            <dd><a href="">授权管理</a></dd>
+                        </dl>
+                    </li>*@
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
@@ -48,32 +48,35 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                @*<ul class="layui-nav layui-nav-tree" lay-filter="test">
-            <li class="layui-nav-item layui-nav-itemed">
-                <a class="" href="javascript:;">所有商品</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">列表一</a></dd>
-                    <dd><a href="javascript:;">列表二</a></dd>
-                    <dd><a href="javascript:;">列表三</a></dd>
-                    <dd><a href="">超链接</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">解决方案</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">列表一</a></dd>
-                    <dd><a href="javascript:;">列表二</a></dd>
-                    <dd><a href="">超链接</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-            <a href="">云市场</a>
-            </li>
-            <li class="layui-nav-item">
-            <a href="">发布商品</a>
-            </li>
-        </ul>*@
-                <div id="hxNavbar"></div>
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    @*<li class="layui-nav-item layui-nav-itemed">
+            <a class="" href="javascript:;">所有商品</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">列表一</a></dd>
+                <dd><a href="javascript:;">列表二</a></dd>
+                <dd><a href="javascript:;">列表三</a></dd>
+                <dd><a href="">超链接</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">解决方案</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">列表一</a></dd>
+                <dd><a href="javascript:;">列表二</a></dd>
+                <dd><a href="">超链接</a></dd>
+            </dl>
+        </li>*@
+                    <li class="layui-nav-item">
+                        <a href="@Url.Action("Index","Home")">主页</a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="@Url.Action("Index","Press")">新闻</a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="@Url.Action("Index","Catalos")">目录</a>
+                    </li>
+                </ul>
+                @*<div id="hxNavbar"></div>*@
             </div>
         </div>
 
@@ -87,14 +90,14 @@
             © TheWorldTree.com
         </div>
     </div>
-  
+
     <script>
         //JavaScript代码区域
         layui.use('element', function () {
             var element = layui.element;
 
         });
-        layui.extend({//设置无限下拉框
+        @*layui.extend({//设置无限下拉框
             hxNav: '../js/hxNav'  // 根据你自己的目录设置
         }).use(['element', 'hxNav'], function () {
             layui.hxNav({
@@ -106,7 +109,7 @@
                     console.log(v);
                 }
             });
-        });
+        });*@
     </script>
     @RenderSection("Scripts", required: false)
 </body>

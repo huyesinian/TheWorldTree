@@ -1,0 +1,135 @@
+﻿@model TheWorldTree.Models.TreeCatalos
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "添加目录";
+    Layout = "~/Views/Shared/_Layout_Edit.cshtml";
+}
+
+
+<form class="layui-form" lay-filter="catalos">
+    @Html.HiddenFor(x => x.ID)
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Name)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Name)
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Alias)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Alias)
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Sort)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Sort)
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.ParentId)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.ParentId)
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Url)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Url)
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Iconic)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Iconic)
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.IsLast)
+            <div class="layui-input-block">
+                @Html.SwitchLayuiFor(x => x.IsLast)
+            </div>
+        </div>
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Enable)
+            <div class="layui-input-block">
+                @Html.SwitchLayuiFor(x => x.Enable)
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelLayuiFor(x => x.Remark)
+        <div class="layui-input-block">
+            @Html.TextareaLayuiFor(x => x.Remark)
+        </div>
+      
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'layedit', 'form','element'], function () {
+        var layedit = layui.layedit;
+        var element = layui.element;
+        var form = layui.form;
+        var imgUrl = "@Url.Action("UploadIMG", "UploadFile")?contentId=" + $("#ID").val();
+        layedit.set({
+            uploadImage: {
+                url: imgUrl //接口url
+                , type: 'post' //默认post
+            }
+        });
+       
+        ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data.type == 0) {
+                        layer.msg(data.message);
+                        LayUIMethod.TabPageTurnOff();
+                    }
+                    else {
+                        layer.msg(data.message);
+                    }
+
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+        //监听赋值事件
+        form.on('switch', function () {
+            var val = $('input:checkbox[name="Enable"]:checked').val();
+            var val1 = $('input:checkbox[name="IsLast"]:checked').val();
+            if (val == "on") {
+                form.val('catalos', {
+                    "Enable": "true"
+                });
+            }
+            if (val1 == "on") {
+                form.val('catalos', {
+                    "IsLast": "true"
+                });
+            }
+        });
+    });
+</script>
