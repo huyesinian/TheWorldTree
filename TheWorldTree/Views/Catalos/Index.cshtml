@@ -125,40 +125,8 @@
                     , shadeClose: true
                     , shade: 0.3
                     , offset: "20%"
-                    , area: ['60%', '60%']
-                    , btn: ['确定', '取消']
+                    , area: ['60%', '65%']
                     , content: '@Url.Action("Edit")?id=' + data.ID   //实际开发中传入真实iframe地址
-                    , yes: function (index, layero) {
-                        var form = layer.getChildFrame('form', index);//通过该对象可以获取iframe中的dom元素
-                        data.ID = form[0]['ID'].value;
-                        data.Name = form[0]['Name'].value;
-                        data.Alias = form[0]['Alias'].value;
-                        data.Sort = form[0]['Sort'].value;
-                        data.ParentId = form[0]['ParentId'].value;
-                        data.Url = form[0]['Url'].value;
-                        data.Iconic = form[0]['Iconic'].value;
-                        data.IsLast = form[0]['IsLast'].value;
-                        data.Enable = form[0]['Enable'].value;
-                        data.Remark = form[0]['Remark'].value;
-                        $.ajax({
-                            type: 'post',
-                            url: '@Url.Action("Edit")',  //开发时传入真实接口
-                            data: data,
-                            dataType: 'json',
-                            success: function (data) {
-                                layer.msg(data.message);
-                                if (data.type == 0) {
-                                    location.reload();//表格的
-                                }
-                               
-                            },
-                            error: function () {
-                                layer.msg("出现错误");
-                                return false;
-                            }
-                        })
-                        layer.close(index); //关闭弹层
-                    }
                 });
             }
         });

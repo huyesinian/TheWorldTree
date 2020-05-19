@@ -11,23 +11,24 @@
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Title)
         <div class="layui-input-block">
-            @Html.EditorLayuiFor(x => x.Title)
+            @Html.EditorLayuiFor(x => x.Title, null, Model.Title)
         </div>
     </div>
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Description)
         <div class="layui-input-block">
-            @Html.EditorLayuiFor(x => x.Description)
+            @Html.EditorLayuiFor(x => x.Description, null, Model.Title)
         </div>
     </div>
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Issue)
         <div class="layui-input-block">
-            @Html.SwitchLayuiFor(x => x.Issue)
+            <input type="hidden" name="Issue" value="0">
+            @Html.BoxLayuiFor(x => x.Issue, ViewBag.Issues as List<SelectListItem>, "checkbox")
         </div>
     </div>
     <div class="layui-form-item">
-        @Html.TextareaLayuiFor(x => x.MainBody, "content")
+        @Html.TextareaLayuiFor(x => x.MainBody, Model.MainBody, "content")
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -80,13 +81,19 @@
             })
         });
         //监听赋值事件
-        form.on('switch', function () {
+        form.on('checkbox(checkboxs)', function () {
             var val = $('input:checkbox[name="Issue"]:checked').val();
-            if (val == "on") {
+            if (val == "0") {
                 form.val('press', {
-                    "Issue": "true"
+                    "Issue": "0"
                 });
             }
+            else {
+                form.val('press', {
+                    "Issue": "1"
+                });
+            }
+
         });
     });
 </script>

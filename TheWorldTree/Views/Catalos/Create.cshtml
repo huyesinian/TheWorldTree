@@ -12,13 +12,13 @@
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.Name)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Name)
+                @Html.EditorLayuiFor(x => x.Name,null,Model.Name)
             </div>
         </div>
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.Alias)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Alias)
+                @Html.EditorLayuiFor(x => x.Alias,null, Model.Alias)
             </div>
         </div>
     </div>
@@ -26,13 +26,13 @@
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.Sort)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Sort)
+                @Html.EditorLayuiFor(x => x.Sort, null, Model.Sort.ToString())
             </div>
         </div>
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.ParentId)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.ParentId)
+                @Html.EditorLayuiFor(x => x.ParentId, null, Model.ParentId)
             </div>
         </div>
     </div>
@@ -41,13 +41,13 @@
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.Url)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Url)
+                @Html.EditorLayuiFor(x => x.Url, null, Model.Url)
             </div>
         </div>
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.Iconic)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Iconic)
+                @Html.EditorLayuiFor(x => x.Iconic, null, Model.Iconic)
             </div>
         </div>
     </div>
@@ -56,20 +56,22 @@
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.IsLast)
             <div class="layui-input-block">
-                @Html.SwitchLayuiFor(x => x.IsLast)
+                <input type="hidden" name="IsLasts" value="0">
+                @Html.BoxLayuiFor(x => x.IsLast, ViewBag.IsLasts as List<SelectListItem>, "checkbox")
             </div>
         </div>
         <div class="layui-inline">
             @Html.LabelLayuiFor(x => x.Enable)
             <div class="layui-input-block">
-                @Html.SwitchLayuiFor(x => x.Enable)
+                <input type="hidden" name="Enables" value="0">
+                @Html.BoxLayuiFor(x => x.Enable, ViewBag.Enables as List<SelectListItem>, "checkbox")
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Remark)
         <div class="layui-input-block">
-            @Html.TextareaLayuiFor(x => x.Remark)
+            @Html.TextareaLayuiFor(x => x.Remark,Model.Remark)
         </div>
       
     </div>
@@ -117,17 +119,27 @@
             })
         });
         //监听赋值事件
-        form.on('switch', function () {
+        form.on('checkbox(checkboxs)', function () {
             var val = $('input:checkbox[name="Enable"]:checked').val();
             var val1 = $('input:checkbox[name="IsLast"]:checked').val();
-            if (val == "on") {
+            if (val == "1") {
                 form.val('catalos', {
-                    "Enable": "true"
+                    "Enable": "1"
                 });
             }
-            if (val1 == "on") {
+            else {
                 form.val('catalos', {
-                    "IsLast": "true"
+                    "Enable": "0"
+                });
+            }
+            if (val1 == "1") {
+                form.val('catalos', {
+                    "IsLast": "1"
+                });
+            }
+            else {
+                form.val('catalos', {
+                    "IsLast": "0"
                 });
             }
         });

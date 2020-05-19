@@ -15,7 +15,7 @@
         }
     }, internal = {
         init: function() {
-            navroot = $(opts.element).addClass('layui-side layui-layout-left layui-nav-side')
+            navroot = $(opts.element).addClass('layui-side-scroll')
                 .css({'background-color':opts.background, width: opts.width });
             var node = $('<ul class="layui-nav layui-nav-tree"></ul>').attr('lay-shrink', opts.shrink?'all':'').appendTo( navroot );
             node.css('width','100%');
@@ -29,8 +29,9 @@
                 cache: false,
                 data: { id: id },
                 dataType: 'json',
-                success: function(res) {
-                    $.each(res, function (index, val) {
+                success: function (res) {
+                   var res1 = JSON.parse(res);
+                    $.each(res1, function (index, val) {
                         /**
                          * @var val.hasChildren
                          */
@@ -38,7 +39,7 @@
                         var sub = (id === null) ? $('<li class="layui-nav-item"></li>').appendTo(node) : $('<dd></dd>').appendTo(node);
                         sub.data('nodeItem', val);
                         nodes[val.id] = sub;
-                        var a = $('<a href="javascript:void(0)"></a>').appendTo(sub);
+                        var a = $('<a href="'+val.href+'"></a>').appendTo(sub);
                         a.css('margin-left', level * 12 );
                         if (val.icon) {
                             $('<i class="layui-icon"></i>').addClass(val.icon).appendTo(a);

@@ -11,13 +11,13 @@
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.Name)
                 <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Name)
+                    @Html.EditorLayuiFor(x => x.Name, null, Model.Name)
                 </div>
             </div>
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.Alias)
                 <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Alias)
+                    @Html.EditorLayuiFor(x => x.Alias, null, Model.Alias)
                 </div>
             </div>
         </div>
@@ -25,13 +25,13 @@
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.Sort)
                 <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Sort)
+                    @Html.EditorLayuiFor(x => x.Sort, null, Model.Sort.ToString())
                 </div>
             </div>
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.ParentId)
                 <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.ParentId)
+                    @Html.EditorLayuiFor(x => x.ParentId, null, Model.ParentId)
                 </div>
             </div>
         </div>
@@ -40,13 +40,13 @@
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.Url)
                 <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Url)
+                    @Html.EditorLayuiFor(x => x.Url, null, Model.Url)
                 </div>
             </div>
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.Iconic)
                 <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Iconic)
+                    @Html.EditorLayuiFor(x => x.Iconic, null, Model.Iconic)
                 </div>
             </div>
         </div>
@@ -55,56 +55,87 @@
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.IsLast)
                 <div class="layui-input-block">
-                    @Html.SwitchLayuiFor(x => x.IsLast)
+                    <input type="hidden" name="IsLast" value="0">
+                    @Html.BoxLayuiFor(x => x.IsLast, ViewBag.IsLasts as List<SelectListItem>, "checkbox")
                 </div>
             </div>
             <div class="layui-inline">
                 @Html.LabelLayuiFor(x => x.Enable)
                 <div class="layui-input-block">
-                    @Html.SwitchLayuiFor(x => x.Enable)
+                    <input type="hidden" name="Enable" value="0">
+                    @Html.BoxLayuiFor(x => x.Enable, ViewBag.Enables as List<SelectListItem>, "checkbox")
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             @Html.LabelLayuiFor(x => x.Remark)
             <div class="layui-input-block">
-                @Html.TextareaLayuiFor(x => x.Remark)
+                @Html.TextareaLayuiFor(x => x.Remark, Model.Remark)
             </div>
 
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+            </div>
         </div>
     </form>
     <script>
     layui.use(['layer', 'layedit', 'form','element'], function () {
         var form = layui.form;
 
+     ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data.type == 0) {
+                        layer.msg(data.message);
+                        LayUIMethod.IframeTurnOff();
+                    }
+                    else {
+                        layer.msg(data.message);
+                    }
 
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
         //监听赋值事件
-        form.on('switch', function () {
+        form.on('checkbox(checkboxs)', function () {
             var val = $('input:checkbox[name="Enable"]:checked').val();
             var val1 = $('input:checkbox[name="IsLast"]:checked').val();
-            if (val == "on") {
+            if (val == "1") {
                 form.val('catalos', {
-                    "Enable": "true"
+                    "Enable": "1"
                 });
             }
-            if (val1 == "on") {
+            else {
                 form.val('catalos', {
-                    "IsLast": "true"
+                    "Enable": "0"
+                });
+            }
+            if (val1 == "1") {
+                form.val('catalos', {
+                    "IsLast": "1"
+                });
+            }
+            else {
+                form.val('catalos', {
+                    "IsLast": "0"
                 });
             }
         });
-        //给表单赋值
-        form.val("catalos", {
-            "ID": "@Model.ID" // "name": "value"
-            , "Name": "@Model.Name"
-            , "Alias": "@Model.Alias"
-            , "Sort": "@Model.Sort"
-            , "ParentId": "@Model.ParentId"
-            , "Url": "@Model.Url"
-            , "Iconic": "@Model.Iconic"
-            , "IsLast": "@Model.IsLast"
-            , "Enable": "@Model.Enable"
-            , "Remark": "@Model.Remark"
+
+        form.val('catalos', {
+            "Remark": "@Html.Raw(Model.Remark)"
+
         });
     });
     </script>

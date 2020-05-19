@@ -66,12 +66,12 @@ namespace TheWorldTree.Models
         /// 状态
         /// </summary>
         [Display(Name = "状态")]
-        public bool Enable { get; set; }
+        public string Enable { get; set; }
 
         /// <summary>
         /// 最后一项
         /// </summary>
         [Display(Name = "最后一项")]
-        public bool IsLast { get; set; }
+        public string IsLast { get; set; }
     }
 }

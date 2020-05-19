@@ -2,51 +2,58 @@
     ViewData["Title"] = "主页";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section styles{
+    <style>
+        body {
+            background-color: #d6d2d2;
+        }
+    </style>
+}
 
-
-<div class="layui-fluid" style="height:100%;width:100%;">
-    <div class="layui-row layui-col-space10" style="margin-top:1%">
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space5" style="margin-top:1%">
         <div class="layui-col-md9">
-            <div class="grid-demo grid-demo-bg1" style="background-color: bisque; height: 32%;">
-                <div id="popularity" style="height:100%;"></div>
+            <div class="grid-demo grid-demo-bg1" style="background-color: white;height: 32%;">
+                <div id="popularity" style="height:98%;"></div>
             </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color:#9b8991;height:32%;">
+            <div class="grid-demo" style="background-color:white;height:32%;">
                 <div style="height:100%;"></div>
             </div>
         </div>
     </div>
 
 
-    <div class="layui-row layui-col-space1" style="margin-top:1%">
+    <div class="layui-row layui-col-space5">
         <div class="layui-col-md3">
-            <div class="grid-demo grid-demo-bg1" style="background-color:#808080;height:32%;">
+            <div class="grid-demo grid-demo-bg1" style="background-color: white;height: 32%;">
                 1/4
             </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color:#ff6a00;height:32%;">1/4</div>
+            <div class="grid-demo" style="background-color: white;height: 32%;">1/4</div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo grid-demo-bg1" style="background-color:#ffd800;height:32%;">1/4</div>
+            <div class="grid-demo grid-demo-bg1" style="background-color:white;height: 32%;">1/4</div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color:#b6ff00;height:32%;">1/4</div>
+            <div class="grid-demo" style="background-color:white;height:32%;">1/4</div>
         </div>
     </div>
 
-    <div class="layui-row layui-col-space10" style="margin:1% 0 1% 0">
+    <div class="layui-row layui-col-space5">
         <div class="layui-col-md9">
-            <div class="grid-demo grid-demo-bg1" style="background-color: bisque; height: 32%;">9/12</div>
+            <div class="grid-demo grid-demo-bg1" style="background-color: white;height: 32%;">9/12</div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color:#9b8991;height:32%;">3/12</div>
+            <div class="grid-demo" style="background-color: white;height: 32%;">3/12</div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
+    var ipi = @Html.Raw(ViewBag.IPInfo);//获取每月访问人数
     var dom = document.getElementById("popularity");
     var myChart = echarts.init(dom);
     var app = {};
@@ -90,7 +97,7 @@
                 name: '直接访问',
                 type: 'bar',
                 barWidth: '60%',
-                data: [10, 52, 200, 334, 390, 330, 220, 52, 200, 334, 390, 330, 220]
+                data: [ipi["Jan"], ipi["Feb"], ipi["Mar"], ipi["Apr"], ipi["May"], ipi["Jun"], ipi["Jul"], ipi["Aug"], ipi["Sep"], ipi["Oct"], ipi["Nov"], ipi["Dec"]]
             }
         ]
     };

@@ -133,7 +133,7 @@ namespace TheWorldTree.EXMethod
                                    id = r.ID,
                                    text = r.Name,
                                    icon = r.Iconic,
-                                   hasChildren = r.IsLast == false ? 0 : 1,
+                                   hasChildren = r.IsLast == "1" ? 0 : 1,
                                    href = r.Url
                                }).ToList();
             return CatalosInfo;

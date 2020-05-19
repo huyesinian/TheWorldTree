@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheWorldTree.Data;
 
 namespace TheWorldTree.Migrations
 {
     [DbContext(typeof(TheWorldTreeDBContext))]
-    partial class TheWorldTreeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200513062410_V5")]
+    partial class V5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,7 +95,6 @@ namespace TheWorldTree.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("DicCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Node1")
@@ -145,11 +146,9 @@ namespace TheWorldTree.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NodeCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NodeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdateOne")
@@ -273,45 +272,6 @@ namespace TheWorldTree.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("TreeIPInfo");
-                });
-
-            modelBuilder.Entity("TheWorldTree.Models.TreeMsgBoard", b =>
-                {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Creater")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("MsgContent")
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(11)")
-                        .HasMaxLength(11);
-
-                    b.Property<string>("UpdateOne")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserIP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("TreeMsgBoard");
                 });
 
             modelBuilder.Entity("TheWorldTree.Models.TreePress", b =>

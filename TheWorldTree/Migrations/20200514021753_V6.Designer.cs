@@ -3,21 +3,50 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheWorldTree.Data;
 
 namespace TheWorldTree.Migrations
 {
     [DbContext(typeof(TheWorldTreeDBContext))]
-    partial class TheWorldTreeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200514021753_V6")]
+    partial class V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("TheWorldTree.Models.TreeAccessT", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Creater")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("UpdateOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TreeAccessT");
+                });
 
             modelBuilder.Entity("TheWorldTree.Models.TreeCatalos", b =>
                 {

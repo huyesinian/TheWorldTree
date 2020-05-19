@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TheWorldTree.Data;
+using TheWorldTree.EXMethod;
 using TheWorldTree.Models;
 
 namespace TheWorldTree.Controllers
@@ -16,10 +19,11 @@ namespace TheWorldTree.Controllers
     /// </summary>
     public class HomeController : BaseVerifyController
     {
-
+        public TreeBaseEX TreeBaseEX;
         public TheWorldTreeDBContext _context;
         public HomeController(TheWorldTreeDBContext context)
         {
+            TreeBaseEX = new TreeBaseEX(context);
             _context = context;
         }
 
@@ -27,25 +31,32 @@ namespace TheWorldTree.Controllers
         public IActionResult Index()
         {
             ///将用户IP信息记录到数据库中
+            string uIP = HttpContext.Session.GetString("CurrentUser");
+            //判断这个用户是不是当天登陆过
+            var uCount = _context.TreeIPInfo.Where(x => x.IPAdd == uIP &&x.IPAccessTime.Date==DateTime.Now.Date).Count();
             try
             {
-                var treeIPInfo = new TreeIPInfo
+                //
+                if (uCount<1)
                 {
-                    ID = Guid.NewGuid().ToString(),
-                    IPAccessTime = DateTime.Now,
-                    IPAdd = HttpContext.Session.GetString("CurrentUser")
-                };
-                
-                _context.Add(treeIPInfo);
-                _context.SaveChangesAsync();
+                    var treeIPInfo = new TreeIPInfo
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        IPAccessTime = DateTime.Now,
+                        IPAdd = uIP
+                    };
+
+                    _context.Add(treeIPInfo);
+                    _context.SaveChangesAsync();
+                }
+                ViewBag.IPInfo = JsonConvert.SerializeObject(TreeBaseEX.GetIPinfo());//获取当前年份的每月访问人数
             }
             catch (Exception ex)
             {
                 Logger.Info(ex.ToString());
             }
-            ///
 
-            ///查询需要在首页显示的图表数据
+           
             
             return View();
         }

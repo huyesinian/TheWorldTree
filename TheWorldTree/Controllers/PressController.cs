@@ -9,6 +9,7 @@ using TheWorldTree.Data;
 using TheWorldTree.Models;
 using System.Reflection;
 using TheWorldTree.EXMethod;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace TheWorldTree.Controllers
 {
@@ -17,12 +18,14 @@ namespace TheWorldTree.Controllers
     /// </summary>
     public class PressController : BaseVerifyController
     {
+        public TreeBaseEX TreeBaseEX;
         public TreePressEX  treePressEX;
         public TheWorldTreeDBContext _context;
        
         public PressController(TheWorldTreeDBContext context)
         {
             treePressEX= new TreePressEX(context);
+            TreeBaseEX = new TreeBaseEX(context);
             _context = context;
         }
         public IActionResult Index()
@@ -53,6 +56,7 @@ namespace TheWorldTree.Controllers
             {
                 ID = Guid.NewGuid().ToString()
             };
+            ViewBag.Issues = TreeBaseEX.GetDic("单选是");
             return View(press);
         }
 
@@ -92,6 +96,7 @@ namespace TheWorldTree.Controllers
         public IActionResult Edit(string id)
         {
             TreePress press = treePressEX.GetList<TreePress>().Where(x => x.ID == id).FirstOrDefault();
+            ViewBag.Issues = TreeBaseEX.GetDic("单选是",press.Issue);
             return View(press);
         }
 
@@ -99,6 +104,7 @@ namespace TheWorldTree.Controllers
         public JsonResult Edit(TreePress press)
         {
             press.UpdateOne= GetCurrentU();
+            press.UpdateTime = DateTime.Now; 
             if (press != null && ModelState.IsValid)
             {
                 try

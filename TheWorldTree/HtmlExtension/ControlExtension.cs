@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Html;
@@ -53,7 +54,7 @@ namespace TheWorldTree.HtmlExtension
         /// <param name="verify">验证</param>
         /// <param name="attributes">属性</param>
         /// <returns></returns>
-        public static IHtmlContent EditorLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, string type = null, string autocomplete = null, string verify = null, object attributes = null)
+        public static IHtmlContent EditorLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, string type = null, string para = null, string autocomplete = null, string verify = null, object attributes = null)
         {
             string result;
             var name = (expression.Body as MemberExpression).Member.Name;//获取字段的名称
@@ -68,6 +69,7 @@ namespace TheWorldTree.HtmlExtension
             }
             input.MergeAttribute("name", name);
             input.MergeAttribute("id", name);
+            input.MergeAttribute("value", para);
             using (var sw = new System.IO.StringWriter())
             {
                 input.WriteTo(sw, System.Text.Encodings.Web.HtmlEncoder.Default);
@@ -86,7 +88,7 @@ namespace TheWorldTree.HtmlExtension
         /// <param name="verify">验证</param>
         /// <param name="attributes">属性</param>
         /// <returns></returns>
-        public static IHtmlContent TextareaLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, string verify = null, object attributes = null)
+        public static IHtmlContent TextareaLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, string para = null, string verify = null, object attributes = null)
         {
             string result;
             var name = (expression.Body as MemberExpression).Member.Name;//获取字段的名称
@@ -99,6 +101,7 @@ namespace TheWorldTree.HtmlExtension
             }
             textarea.MergeAttribute("name", name);
             textarea.MergeAttribute("id", name);
+            textarea.MergeAttribute("value", para);
             using (var sw = new System.IO.StringWriter())
             {
                 textarea.WriteTo(sw, System.Text.Encodings.Web.HtmlEncoder.Default);
@@ -106,6 +109,8 @@ namespace TheWorldTree.HtmlExtension
             }
             return new HtmlString(result);
         }
+
+
 
 
         /// <summary>
@@ -132,6 +137,52 @@ namespace TheWorldTree.HtmlExtension
             {
                 input.WriteTo(sw, System.Text.Encodings.Web.HtmlEncoder.Default);
                 result = sw.ToString();
+            }
+            return new HtmlString(result);
+        }
+
+        /// <summary>
+        /// layui复选框
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="helper"></param>
+        /// <param name="expression"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+        public static IHtmlContent BoxLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, IEnumerable<SelectListItem> items,string controlType ,int column = 0, object attributes = null)
+        {
+            //int moment = column;//暂存行数
+            string result="";
+            if (items != null && items.Any())
+            {
+                //int count = 1;
+                ///获取表达式属性名称
+                var name = (expression.Body as MemberExpression).Member.Name;//获取字段的名称
+                foreach (var item in items)
+                {
+                    TagBuilder checkbox = new TagBuilder("input");
+                    checkbox.Attributes.Add("type", controlType);
+                    checkbox.Attributes.Add("name", name);
+                    checkbox.Attributes.Add("value", item.Value);
+                    checkbox.Attributes.Add("title", item.Text);
+                    checkbox.Attributes.Add("lay-filter", controlType + "s");
+                    if (item.Selected)
+                    {
+                        checkbox.Attributes.Add("checked", "checked");
+                    }
+                    if (attributes != null)
+                    {
+                        checkbox.MergeAttributes(new RouteValueDictionary(attributes));
+                    }
+                    using (var sw = new System.IO.StringWriter())
+                    {
+                        checkbox.WriteTo(sw, System.Text.Encodings.Web.HtmlEncoder.Default);
+                        result += sw.ToString();
+                    }
+                }
+               
+
             }
             return new HtmlString(result);
         }

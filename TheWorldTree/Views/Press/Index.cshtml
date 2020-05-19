@@ -122,10 +122,10 @@
                     , shadeClose: true
                     , shade: 0.3
                     , offset: "20%"
-                    , area: ['60%', '60%']
-                    , btn: ['确定', '取消']
+                    , area: ['60%', '65%']
+                    //, btn: ['确定', '取消']
                     , content: '@Url.Action("Edit")?id=' + data.ID   //实际开发中传入真实iframe地址
-                    , yes: function (index, layero) {
+                    @*, yes: function (index, layero) {
                         let submitID = 'LAY-user-front-submit'
                         let submit = layero.find('iframe').contents().find('#' + submitID);
                         submit.trigger('click');
@@ -154,7 +154,7 @@
                             }
                         })
                         layer.close(index); //关闭弹层
-                    }
+                    }*@
                 });
             }
         });

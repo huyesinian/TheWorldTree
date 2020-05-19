@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Apps.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TheWorldTree.Data;
 using TheWorldTree.EXMethod;
 using TheWorldTree.Models;
@@ -16,14 +17,18 @@ namespace TheWorldTree.Controllers
     /// </summary>
     public class CatalosController : BaseVerifyController
     {
+        public TreeBaseEX TreeBaseEX;
         public TreeCatalosEX  treeCatalosEX;
         public TheWorldTreeDBContext _context;
 
         public CatalosController(TheWorldTreeDBContext context)
         {
             treeCatalosEX = new TreeCatalosEX(context);
+            TreeBaseEX = new TreeBaseEX(context);
             _context = context;
         }
+
+       
 
         public IActionResult Index()
         {
@@ -53,6 +58,8 @@ namespace TheWorldTree.Controllers
             {
                 ID = Guid.NewGuid().ToString()
             };
+            ViewBag.IsLasts = TreeBaseEX.GetDic("单选是");
+            ViewBag.Enables = TreeBaseEX.GetDic("单选是");
             return View(catalos);
         }
 
@@ -92,6 +99,8 @@ namespace TheWorldTree.Controllers
         public IActionResult Edit(string id)
         {
             TreeCatalos catalos = treeCatalosEX.GetList<TreeCatalos>().Where(x => x.ID == id).FirstOrDefault();
+            ViewBag.IsLasts = TreeBaseEX.GetDic("单选是",catalos.IsLast);
+            ViewBag.Enables = TreeBaseEX.GetDic("单选是", catalos.Enable);
             return View(catalos);
         }
 

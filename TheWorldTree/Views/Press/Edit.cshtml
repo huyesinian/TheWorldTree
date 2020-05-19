@@ -10,29 +10,32 @@
         <div class="layui-form-item">
             @Html.LabelLayuiFor(x => x.Title)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Title)
+                @Html.EditorLayuiFor(x => x.Title, null, Model.Title)
             </div>
         </div>
         <div class="layui-form-item">
             @Html.LabelLayuiFor(x => x.Description)
             <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Description)
+                @Html.EditorLayuiFor(x => x.Description, null, Model.Title)
             </div>
         </div>
         <div class="layui-form-item">
             @Html.LabelLayuiFor(x => x.Issue)
             <div class="layui-input-block">
-                @Html.SwitchLayuiFor(x => x.Issue)
+                <input type="hidden" name="Issue" value="0">
+                @Html.BoxLayuiFor(x => x.Issue, ViewBag.Issues as List<SelectListItem>, "checkbox")
             </div>
         </div>
-        <div class="layui-form-item layui-hide">
-            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        <div class="layui-form-item">
+            @Html.TextareaLayuiFor(x => x.MainBody, Model.MainBody, "content")
         </div>
         <div class="layui-form-item">
-            @Html.TextareaLayuiFor(x => x.MainBody, "content")
+            <div class="layui-input-block">
+                <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+            </div>
         </div>
     </form>
-<script>
+    <script>
     layui.use(['layer', 'layedit', 'form','element'], function () {
         var layedit = layui.layedit;
         var element = layui.element;
@@ -50,24 +53,49 @@
                 return layedit.sync(index);
             }
         });
-       
+         ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data.type == 0) {
+                        layer.msg(data.message);
+                        LayUIMethod.IframeTurnOff();
+                     
+                    }
+                    else {
+                        layer.msg(data.message);
+                    }
+
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
         //监听赋值事件
-        form.on('switch', function () {
+        form.on('checkbox(checkboxs)', function () {
             var val = $('input:checkbox[name="Issue"]:checked').val();
-            if (val == "on") {
+            if (val == "1") {
                 form.val('press', {
-                    "Issue": "true"
+                    "Issue": "1"
+                });
+            }
+            else {
+                form.val('press', {
+                    "Issue": "0"
                 });
             }
         });
-        //给表单赋值
-        form.val("press", {
-            "ID": "@Model.ID" // "name": "value"
-            , "Title": "@Model.Title"
-            , "Description": "@Model.Description"
-            , "Issue": "@Model.Issue"
-            , "MainBody": "@Model.MainBody"
-
+        form.val('press', {
+            "MainBody": "@Html.Raw(Model.MainBody)"
         });
+
     });
-</script>
+
+
+    </script>

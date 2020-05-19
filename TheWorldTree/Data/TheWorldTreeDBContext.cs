@@ -9,6 +9,7 @@ namespace TheWorldTree.Data
 {
     public class TheWorldTreeDBContext : DbContext
     {
+
         public TheWorldTreeDBContext(DbContextOptions<TheWorldTreeDBContext> options) : base(options){}
 
 
@@ -22,6 +23,10 @@ namespace TheWorldTree.Data
 
         public DbSet<TreePress> TreePress { get; set; }
 
+        public DbSet<TreeDic> TreeDic { get; set; }
+
+        public DbSet<TreeMsgBoard> TreeMsgBoard { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,7 +36,8 @@ namespace TheWorldTree.Data
             modelBuilder.Entity<TreeFileSuffixType>().ToTable("TreeFileSuffixType");
             modelBuilder.Entity<TreeFileInfo>().ToTable("TreeFileInfo");
             modelBuilder.Entity<TreePress>().ToTable("TreePress");
-          
-    }
+            modelBuilder.Entity<TreeDic>().ToTable("TreeDic");
+            modelBuilder.Entity<TreeMsgBoard>().ToTable("TreeMsgBoard");
+        }
     }
 }

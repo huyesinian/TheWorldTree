@@ -34,7 +34,7 @@ namespace TheWorldTree.Models
         /// 是否发布
         /// </summary>
         [Display(Name = "是否发布")]
-        public bool Issue { get; set; }
+        public string Issue { get; set; }
 
     }
 }
