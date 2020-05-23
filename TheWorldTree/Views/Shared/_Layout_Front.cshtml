@@ -1,0 +1,76 @@
+﻿
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>@ViewData["Title"] - TheWorldTree</title>
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/lib/front/main.css" rel="stylesheet" />
+    <script src="~/lib/layui/layui.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+    <!-- header -->
+    <div class="header_box">
+        <div class="header">
+            <ul class="app-header">
+                <li class="app-header-menuicon">
+                    <i class="layui-icon layui-icon-more-vertical"></i>
+                </li>
+            </ul>
+            <h1 class="logo">
+                <a href="#">logo</a>
+            </h1>
+            <div class="nav" style="visibility: visible">
+                <a href='@Url.Action("Index","FrontHome")' class="active">首页</a>
+                <a href="case.html">案例</a>
+                <a href="service.html">服务</a>
+                <a href='@Url.Action("Index","FrontAboutUs")'>关于</a>
+            </div>
+            <ul class="layui-nav header-down-nav">
+                <li class="layui-nav-item"><a href='@Url.Action("Index","FrontHome")' class="active">首页</a></li>
+                <li class="layui-nav-item"><a href="case.html">案例</a></li>
+                <li class="layui-nav-item"><a href="service.html">服务</a></li>
+                <li class="layui-nav-item"><a href='@Url.Action("Index","FrontAboutUs")'>关于</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- end-header -->
+    <!-- content -->
+    <div class="content">
+        @RenderBody()
+    </div>
+    <!-- end-content -->
+    <!-- footer -->
+    <div class="footer">
+        © TheWorldTree.com
+    </div>
+    <!-- end-footer -->
+
+    <script>
+        layui.use(['carousel', 'jquery', 'element'], function () {
+            var carousel = layui.carousel, $ = layui.$;
+            //建造实例
+            carousel.render({
+                elem: '#test1'
+                , width: '100%' //设置容器宽度
+                , arrow: 'always'
+                , height: 'auto'
+                //,anim: 'updown' //切换动画方式
+            });
+            $('.app-header-menuicon').on('click', function () {
+                $('.header-down-nav').toggleClass('down-nav')
+            })
+            var imgH = $('.imgbox div.layui-this').outerHeight();
+            $('.imgH').css('height', imgH + 'px')
+            window.onresize = function () {
+                var imgH = $('.imgbox div.layui-this').outerHeight();
+                $('.imgH').css('height', imgH + 'px')
+            };
+
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,144 @@
+﻿@model TheWorldTree.Models.TreeMsgBoard
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "关于";
+    Layout = "~/Views/Shared/_Layout_Front.cshtml";
+}
+<link href="~/lib/jquerybaidumap/css/style.css" rel="stylesheet" />
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=2COzFaICuIyVj7V3VetKfmdRVnX8BhVr"></script>
+<!-- about-content -->
+<div class="about-content">
+    <div class="about-big-img">
+        <div class="text_box">
+            <div class="text">
+                <h3>我们的信念</h3>
+                <p>身处在前端社区的繁荣之下，我们都在有意或无意地追逐。而 layui偏偏回望当初，奔赴在返璞归真的漫漫征途，自信并勇敢着，追寻于 原生态的书写指令，试图以最简单的方式诠释高效。
+            </div>
+        </div>
+    </div>
+    <div class="about-info">
+        <div class="img-texts">
+            <div class="item">
+                <div class="layui-fluid">
+                    <div class="layui-row">
+                        <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 img-center">
+                            <div class="location-map">
+                                <div id="container" style="width: 100%; height: 100%; overflow: hidden; position: relative; z-index: 0; background-color: rgb(243, 241, 236); color: rgb(0, 0, 0); text-align:left;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12 layui-col-sm12 layui-col-md6">
+                            <div class="layui-card" style="height: 500px;background: #f5f2f2">
+                                <div class="layui-card-header">留言板</div>
+                                <div class="layui-card-body">
+                                    <form class="layui-form"  lay-filter="fAboutUs" id="fAboutUs">
+                                        <div class="layui-form-item" style="margin-bottom:40px">
+                                            @Html.LabelLayuiFor(model => model.UserIP)
+                                            <div class="layui-input-block">
+                                                @Html.EditorLayuiFor(model => model.UserIP)
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item" style="margin-bottom:40px">
+                                            @Html.LabelLayuiFor(model => model.Phone)
+                                            <div class="layui-input-block">
+                                                @Html.EditorLayuiFor(model => model.Phone,null,null,null, "phone")
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item" style="margin-bottom:40px">
+                                            @Html.LabelLayuiFor(model => model.Email)
+                                            <div class="layui-input-block">
+                                                @Html.EditorLayuiFor(model => model.Email, null, null, null, "email")
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item layui-form-text" style="margin-bottom:40px">
+                                            @Html.LabelLayuiFor(model => model.MsgContent)
+                                            <div class="layui-input-block">
+                                                @Html.TextareaLayuiFor(model => model.MsgContent)
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="coreTeam_box">
+                <div class="writebg"></div>
+                <div class="coreTeam">
+                    <div class="layui-fluid">
+                        <h3>核心团队</h3>
+                        <h4>有了向心力，才有可能凝聚</h4>
+                        <div class="layui-row layui-col-space15">
+                            <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+                                <div class="imgTxt">
+                                    <img src="../res/static/images/gy_img2.jpg" alt="">
+                                    <h6>产品总监</h6>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+                                <div class="imgTxt">
+                                    <img src="../res/static/images/gy_img3.jpg" alt="">
+                                    <h6>设计总监</h6>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+                                <div class="imgTxt">
+                                    <img src="../res/static/images/gy_img4.jpg" alt="">
+                                    <h6>制作总监</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+    </div>
+</div>
+<script>
+
+    var map = new BMap.Map("container");          // 创建地图实例     // 初始化地图，设置中心点坐标和地图级别
+    map.centerAndZoom("攸县", 15);
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.ScaleControl());
+    map.addControl(new BMap.OverviewMapControl());
+    map.addControl(new BMap.MapTypeControl());
+    layui.use(['layer', 'form'], function () {
+        var form = layui.form;
+        ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("MsgBoard")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data == 1) {
+                        $("#fAboutUs").find("input,textarea").each(function () {
+                            this.value = "";//清空表单中所有文本框数据
+                        });
+                        layer.msg("提交成功");
+                       
+                    }
+                    else {
+                        layer.msg(data);
+                    }
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+      
+    });
+</script>
+<!-- about-content -->

@@ -68,6 +68,16 @@ namespace TheWorldTree.Models
         }
 
 
-
+        /// <summary>
+        /// 查询用户IP当日提交留言次数
+        /// </summary>
+        /// <param name="UserIP">用户IP</param>
+        /// <returns></returns>
+        public string GetMsgIPNum(string userIP)
+        {
+            var redis = redisManger.GetClient();
+            var num = int.Parse(redis.Get<string>(userIP) ?? "0");
+            return num >= 3 ? "留言次数以达到当日上限" : "";
+        }
     }
 }

@@ -72,19 +72,19 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (treeCatalosEX.Create(catalos) == 1)
+                    if (treeCatalosEX.Create(catalos) == Suc)
                     {
-                        return Json(JsonHandler.CreateMessage(0, "创建成功"));
+                        return Json(JsonHandler.CreateMessage(Suc, "创建成功"));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, "创建失败"));
+                        return Json(JsonHandler.CreateMessage(Def, "创建失败"));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + ex.ToString());
-                    return Json(JsonHandler.CreateMessage(1, "创建失败" + ex.ToString()));
+                    return Json(JsonHandler.CreateMessage(Def, "创建失败" + ex.ToString()));
                 }
 
             }
@@ -112,23 +112,23 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (treeCatalosEX.Edit(catalos) == 1)
+                    if (treeCatalosEX.Edit(catalos) == Suc)
                     {
-                        return Json(JsonHandler.CreateMessage(0, "修改成功"));
+                        return Json(JsonHandler.CreateMessage(Suc, "修改成功"));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, "修改失败"));
+                        return Json(JsonHandler.CreateMessage(Def, "修改失败"));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + MethodBase.GetCurrentMethod().Name + ":" + ex.ToString());
-                    return Json(JsonHandler.CreateMessage(1, "修改失败" + ex.ToString()));
+                    return Json(JsonHandler.CreateMessage(Def, "修改失败" + ex.ToString()));
                 }
 
             }
-            return Json(JsonHandler.CreateMessage(1, GetEntityError()));
+            return Json(JsonHandler.CreateMessage(Def, GetEntityError()));
 
         }
         #endregion
@@ -142,26 +142,26 @@ namespace TheWorldTree.Controllers
                 try
                 {
                     TreeCatalos catalos = treeCatalosEX.GetList<TreeCatalos>().Where(x => x.ID == id).FirstOrDefault();
-                    if (treeCatalosEX.Delete(catalos) == 1)
+                    if (treeCatalosEX.Delete(catalos) == Suc)
                     {
 
-                        return Json(JsonHandler.CreateMessage(0, "删除成功"));
+                        return Json(JsonHandler.CreateMessage(Suc, "删除成功"));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, "删除失败"));
+                        return Json(JsonHandler.CreateMessage(Def, "删除失败"));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + ex.ToString());
-                    return Json(JsonHandler.CreateMessage(1, "删除失败" + ex.ToString()));
+                    return Json(JsonHandler.CreateMessage(Def, "删除失败" + ex.ToString()));
                 }
 
             }
             else
             {
-                return Json(JsonHandler.CreateMessage(1, "请选择要删除的数据"));
+                return Json(JsonHandler.CreateMessage(Def, "请选择要删除的数据"));
             }
 
         }
@@ -169,9 +169,9 @@ namespace TheWorldTree.Controllers
 
         #region 获取目录json结果集
         [HttpPost]
-        public JsonResult GetJsonResult()
+        public JsonResult GetJsonResult(string id=null)
         {
-            string CatalosJsonString = treeCatalosEX.GetJsonString();
+            string CatalosJsonString = treeCatalosEX.GetJsonString(id);
             return Json(CatalosJsonString);
 
         }

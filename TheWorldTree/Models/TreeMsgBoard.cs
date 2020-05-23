@@ -12,9 +12,9 @@ namespace TheWorldTree.Models
     public class TreeMsgBoard : TreeOperate
     {
         /// <summary>
-        /// 用户IP
+        /// 姓名
         /// </summary>
-        [Display(Name = "用户IP")]
+        [Display(Name = "姓名")]
         public string UserIP { get; set; }
         /// <summary>
         /// 留言内容

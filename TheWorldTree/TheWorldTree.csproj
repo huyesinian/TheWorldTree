@@ -21,7 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0-preview.4.20261.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="ServiceStack.Redis.Core" Version="5.7.0" />
@@ -35,6 +35,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\FrontAboutUs\Data\" />
+    <Folder Include="Areas\FrontAboutUs\Models\" />
+    <Folder Include="Areas\FrontHome\Data\" />
+    <Folder Include="Areas\FrontHome\Models\" />
+    <Folder Include="Areas\FrontPress\Data\" />
+    <Folder Include="Areas\FrontPress\Models\" />
+    <Folder Include="Areas\FrontPress\Views\" />
     <Folder Include="wwwroot\FileSave\2020-04-06\" />
   </ItemGroup>
 

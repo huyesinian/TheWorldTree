@@ -112,10 +112,19 @@ namespace TheWorldTree.EXMethod
         /// <summary>
         /// 获取json结果集
         /// </summary>
+        /// <param name="id">这是父id</param>
         /// <returns></returns>
-        public string GetJsonString()
+        public string GetJsonString(string id=null)
         {
             var CatalosList = GetList<TreeCatalos>();
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                CatalosList = CatalosList.Where(x => x.ParentId == id).ToList();//获取当前节点的子节点
+            }
+            else
+            {
+                CatalosList = CatalosList.Where(x => x.ParentId == "0").ToList();//获取所有的父节点
+            }
             var CatalosInfo = GetCatalosInfo(CatalosList);
             return JsonConvert.SerializeObject(CatalosInfo); ;
         }

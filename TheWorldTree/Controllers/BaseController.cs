@@ -15,6 +15,16 @@ namespace TheWorldTree.Controllers
     public class BaseController : Controller
     {
         /// <summary>
+        /// 成功
+        /// </summary>
+        public  const int  Suc= 1;
+
+        /// <summary>
+        /// 失败
+        /// </summary>
+        public const int Def = 0;
+
+        /// <summary>
         /// redis相关操作
         /// </summary>
         public static readonly RedisAction Redis = new RedisAction();

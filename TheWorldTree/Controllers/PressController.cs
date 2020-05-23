@@ -69,24 +69,24 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (treePressEX.Create(press) == 1)
+                    if (treePressEX.Create(press) == Suc)
                     {
-                        return Json(JsonHandler.CreateMessage(0, "创建成功"));
+                        return Json(JsonHandler.CreateMessage(Suc, "创建成功"));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, "创建失败"));
+                        return Json(JsonHandler.CreateMessage(Def, "创建失败"));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name+":"+ex.ToString());
-                    return Json(JsonHandler.CreateMessage(1, "创建失败" + ex.ToString()));
+                    return Json(JsonHandler.CreateMessage(Def, "创建失败" + ex.ToString()));
                 }
 
             }
             
-            return Json(JsonHandler.CreateMessage(1, GetEntityError()));
+            return Json(JsonHandler.CreateMessage(Def, GetEntityError()));
 
         }
         #endregion
@@ -109,19 +109,19 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    if (treePressEX.Edit(press) == 1)
+                    if (treePressEX.Edit(press) == Suc)
                     {
-                        return Json(JsonHandler.CreateMessage(0, "修改成功"));
+                        return Json(JsonHandler.CreateMessage(Suc, "修改成功"));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, "修改失败"));
+                        return Json(JsonHandler.CreateMessage(Def, "修改失败"));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + MethodBase.GetCurrentMethod().Name +":"+ ex.ToString());
-                    return Json(JsonHandler.CreateMessage(1, "修改失败" + ex.ToString()));
+                    return Json(JsonHandler.CreateMessage(Def, "修改失败" + ex.ToString()));
                 }
 
             }
@@ -139,26 +139,26 @@ namespace TheWorldTree.Controllers
                 try
                 {
                     TreePress press = treePressEX.GetList<TreePress>().Where(x => x.ID == id).FirstOrDefault();
-                    if (treePressEX.Delete(press) == 1)
+                    if (treePressEX.Delete(press) == Suc)
                     {
 
-                        return Json(JsonHandler.CreateMessage(0, "删除成功"));
+                        return Json(JsonHandler.CreateMessage(Suc, "删除成功"));
                     }
                     else
                     {
-                        return Json(JsonHandler.CreateMessage(1, "删除失败"));
+                        return Json(JsonHandler.CreateMessage(Def, "删除失败"));
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + ex.ToString());
-                    return Json(JsonHandler.CreateMessage(1, "删除失败" + ex.ToString()));
+                    return Json(JsonHandler.CreateMessage(Def, "删除失败" + ex.ToString()));
                 }
 
             }
             else
             {
-                return Json(JsonHandler.CreateMessage(1, "请选择要删除的数据"));
+                return Json(JsonHandler.CreateMessage(Def, "请选择要删除的数据"));
             }
 
         }

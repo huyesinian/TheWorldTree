@@ -103,7 +103,7 @@
                 dataType: 'json',
                 data: data.field,
                 success: function (data) {
-                    if (data.type == 0) {
+                    if (data.type == 1) {
                         layer.msg(data.message);
                         LayUIMethod.TabPageTurnOff();
                     }

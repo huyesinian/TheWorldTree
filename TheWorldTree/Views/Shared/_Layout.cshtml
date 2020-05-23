@@ -95,7 +95,7 @@
 
     <script>
         //JavaScript代码区域
-        layui.use('element', function () {
+        @*layui.use('element', function () {
             var element = layui.element;
 
         });
@@ -109,6 +109,32 @@
                 shrink: false,
                 onSelect: function (v) {
                     console.log(v);
+                }
+            });
+        });*@
+         //JavaScript代码区域
+        layui.config({
+            base:'../js/'  // 根据你自己的目录设置
+        });
+        layui.use(['element', 'hxNav'], function () {
+            var element = layui.element;
+            layui.hxNav({
+                element: '#hxNavbar',        // 必须，指定ID
+                url: '@Url.Action("GetJsonResult", "Catalos")',  // 请求后台数据的接口
+                type: 'post',
+                shrink: false,
+                onSelect: function (v) {
+                    if (v.hasChildren==1) {
+                        $.ajax({
+                            url: '@Url.Action("GetJsonResult", "Catalos")',
+                            data: { id: v.id },
+                            type: "Post",
+                            dataType: "json",
+                            success: function (data) {
+                               
+                            }
+                        });
+                    }
                 }
             });
         });

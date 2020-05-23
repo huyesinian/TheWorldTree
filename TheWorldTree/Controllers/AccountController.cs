@@ -26,7 +26,7 @@ namespace TheWorldTree.Controllers
             if (Redis.GetLoginResult(userName) == passWord)
             {
                 HttpContext.Session.SetString("CurrentUser", userIP);
-                return Json(1);
+                return Json(Suc);
             }
             else
             {

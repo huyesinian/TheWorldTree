@@ -105,7 +105,7 @@
                         dataType: 'json',
                         data: { id: data.ID },
                         success: function (data) {
-                            if (data.type == 0) {
+                            if (data.type == 1) {
                                 layer.msg("删除成功");
                                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
 
