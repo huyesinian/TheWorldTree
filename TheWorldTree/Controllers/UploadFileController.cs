@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -70,7 +71,7 @@ namespace TheWorldTree.Controllers
                                 title = ""
                             };
 
-                            if (Rubbish.Create(TreeF) == 1)
+                            if (Rubbish.Create(TreeF) == Suc)
                             {
                                 JsonImg jsonimg = new JsonImg()
                                 {
@@ -88,10 +89,11 @@ namespace TheWorldTree.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Info(ex.ToString());
+                Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + ex.ToString());
+                return Json(Def);
             }
 
-            return Json(1);
+            return Json(Suc);
         }
     }
 

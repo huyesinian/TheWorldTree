@@ -1,8 +1,10 @@
-﻿using Apps.Common;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using Apps.Common;
+using Microsoft.AspNetCore.Mvc;
 using TheWorldTree.Data;
 using TheWorldTree.EXMethod;
 using TheWorldTree.Models;
@@ -10,26 +12,21 @@ using TheWorldTree.Models;
 namespace TheWorldTree.Controllers
 {
     /// <summary>
-    /// 目录
+    /// 图片文件夹
     /// </summary>
-    public class CatalosController : BaseVerifyController
+    public class AlbumFolderController : BaseVerifyController
     {
         public TreeBaseEX TreeBaseEX;
-        public TreeCatalosEX  treeCatalosEX;
+        public TreeAlbumFolderEX  albumFolderEX;
+        public TreeFileInfoEX treeFileInfoEX;
         public TheWorldTreeDBContext _context;
 
-        public CatalosController(TheWorldTreeDBContext context)
+        public AlbumFolderController(TheWorldTreeDBContext context)
         {
-            treeCatalosEX = new TreeCatalosEX(context);
+            albumFolderEX = new TreeAlbumFolderEX(context);
+            treeFileInfoEX = new TreeFileInfoEX(context);
             TreeBaseEX = new TreeBaseEX(context);
             _context = context;
-        }
-
-       
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         #region 查询
@@ -42,34 +39,61 @@ namespace TheWorldTree.Controllers
         /// <returns></returns>
         public JsonResult GetList(int page, int limit, string searchInfo)
         {
-            var result = treeCatalosEX.GetJsonList(page, limit, searchInfo);
+            var result = albumFolderEX.GetJsonList(page, limit, searchInfo);
+            return Json(result);
+        }
+
+        /// <summary>
+        /// 获取图片列表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="contentID"></param>
+        /// <returns></returns>
+        public JsonResult GetFileList(int page, int limit, string contentID)
+        {
+            var result = treeFileInfoEX.GetJsonList(page, limit, contentID);
+            return Json(result);
+        }
+
+        /// <summary>
+        /// 列表数
+        /// </summary>
+        /// <param name="page">当前页</param>
+        /// <param name="limit">数据条数</param>
+        /// <param name="searchInfo">关联id</param>
+        /// <returns></returns>
+        public JsonResult GetChildList(int page, int limit, string contentId)
+        {
+            var result = treeFileInfoEX.GetJsonList(page, limit, contentId);
             return Json(result);
         }
         #endregion
 
-        #region 创建
-        [HttpGet]
-        public IActionResult Create()
+        public IActionResult Index()
         {
-            TreeCatalos catalos = new TreeCatalos()
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Create()
+        {
+            TreeAlbumFolder albumFolder = new TreeAlbumFolder()
             {
                 ID = Guid.NewGuid().ToString()
             };
-            ViewBag.IsLasts = TreeBaseEX.GetDic("单选是");
-            ViewBag.Enables = TreeBaseEX.GetDic("单选是");
-            return View(catalos);
+            return View(albumFolder);
         }
 
         [HttpPost]
-        public JsonResult Create(TreeCatalos catalos)
+        public JsonResult Create(TreeAlbumFolder model)
         {
-            catalos.Creater = GetCurrentU();
-            catalos.CreateTime = DateTime.Now;
-            if (catalos != null && ModelState.IsValid)
+            model.Creater = GetCurrentU();
+            model.CreateTime = DateTime.Now;
+            if (model != null && ModelState.IsValid)
             {
                 try
                 {
-                    if (treeCatalosEX.Create(catalos) == Suc)
+                    if (albumFolderEX.Create(model) == Suc)
                     {
                         return Json(JsonHandler.CreateMessage(Suc, "创建成功"));
                     }
@@ -86,30 +110,26 @@ namespace TheWorldTree.Controllers
 
             }
 
-            return Json(JsonHandler.CreateMessage(1, GetEntityError()));
-
+            return Json(JsonHandler.CreateMessage(Def, GetEntityError()));
         }
-        #endregion
 
         #region 修改
         [HttpGet]
-        public IActionResult Edit(string id)
+        public ActionResult Edit(string id)
         {
-            TreeCatalos catalos = treeCatalosEX.GetList<TreeCatalos>().Where(x => x.ID == id).FirstOrDefault();
-            ViewBag.IsLasts = TreeBaseEX.GetDic("单选是",catalos.IsLast);
-            ViewBag.Enables = TreeBaseEX.GetDic("单选是", catalos.Enable);
-            return View(catalos);
+            TreeAlbumFolder albumFolder = albumFolderEX.GetList<TreeAlbumFolder>().Where(x => x.ID == id).FirstOrDefault();
+            return View(albumFolder);
         }
 
         [HttpPost]
-        public JsonResult Edit(TreeCatalos catalos)
+        public JsonResult Edit(TreeAlbumFolder albumFolder)
         {
-            catalos.UpdateOne = GetCurrentU();
-            if (catalos != null && ModelState.IsValid)
+            albumFolder.UpdateOne = GetCurrentU();
+            if (albumFolder != null && ModelState.IsValid)
             {
                 try
                 {
-                    if (treeCatalosEX.Edit(catalos) == Suc)
+                    if (albumFolderEX.Edit(albumFolder) == Suc)
                     {
                         return Json(JsonHandler.CreateMessage(Suc, "修改成功"));
                     }
@@ -138,14 +158,15 @@ namespace TheWorldTree.Controllers
             {
                 try
                 {
-                    TreeCatalos catalos = treeCatalosEX.GetList<TreeCatalos>().Where(x => x.ID == id).FirstOrDefault();
-                    if (treeCatalosEX.Delete(catalos) == Suc)
+                    TreeAlbumFolder catalos = albumFolderEX.GetList<TreeAlbumFolder>().Where(x => x.ID == id).FirstOrDefault();
+                    if (albumFolderEX.Delete(catalos) == Suc)
                     {
 
                         return Json(JsonHandler.CreateMessage(Suc, "删除成功"));
                     }
                     else
                     {
+
                         return Json(JsonHandler.CreateMessage(Def, "删除失败"));
                     }
                 }
@@ -164,14 +185,16 @@ namespace TheWorldTree.Controllers
         }
         #endregion
 
-        #region 获取目录json结果集
-        [HttpPost]
-        public JsonResult GetJsonResult(string id=null)
-        {
-            string CatalosJsonString = treeCatalosEX.GetJsonString(id);
-            return Json(CatalosJsonString);
+        #region 上传图片
 
+        [HttpGet]
+        public ActionResult UploadImg(string id)
+        {
+            ViewBag.ContentId = id;
+            return View();
         }
         #endregion
+
+
     }
 }

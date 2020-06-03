@@ -1,0 +1,74 @@
+﻿@model TheWorldTree.Models.TreeAlbumFolder
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "添加图片文件夹";
+    Layout = "~/Views/Shared/_Layout_Edit.cshtml";
+}
+
+
+<form class="layui-form" lay-filter="albumFolder">
+    @Html.HiddenFor(x => x.ID)
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.FlName)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.FlName, null,Model.FlName)
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Describe)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Describe, null, Model.Describe)
+            </div>
+        </div>
+       
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Classify)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Classify, null, Model.Classify)
+            </div>
+        </div>
+      
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'form'], function () {
+        var form = layui.form;
+       
+        ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data.type == 1) {
+                        layer.msg(data.message);
+                        LayUIMethod.IframeTurnOff();
+                    }
+                    else {
+                        layer.msg(data.message);
+                    }
+
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+       
+    });
+</script>

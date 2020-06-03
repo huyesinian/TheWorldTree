@@ -94,29 +94,13 @@
     </div>
 
     <script>
-        //JavaScript代码区域
-        @*layui.use('element', function () {
-            var element = layui.element;
-
-        });
-        layui.extend({//设置无限下拉框
-            hxNav: '../js/hxNav'  // 根据你自己的目录设置
-        }).use(['element', 'hxNav'], function () {
-            layui.hxNav({
-                element: '#hxNavbar',        // 必须，指定ID
-                url: '@Url.Action("GetJsonResult", "Catalos")',  // 请求后台数据的接口
-                type: 'post',
-                shrink: false,
-                onSelect: function (v) {
-                    console.log(v);
-                }
-            });
-        });*@
+       
          //JavaScript代码区域
         layui.config({
             base:'../js/'  // 根据你自己的目录设置
         });
-        layui.use(['element', 'hxNav'], function () {
+        layui.use(['element', 'hxNav', 'carousel'], function () {
+            var carousel = layui.carousel;
             var element = layui.element;
             layui.hxNav({
                 element: '#hxNavbar',        // 必须，指定ID
@@ -136,6 +120,38 @@
                         });
                     }
                 }
+            });
+            //常规轮播
+            carousel.render({
+                elem: '#test1'
+                , interval: 1800
+                , anim: 'fade'
+                , height: '100%'
+                , width: '100%'
+            });
+            //常规轮播
+            carousel.render({
+                elem: '#test2'
+                , interval: 1800
+                , anim: 'fade'
+                , height: '100%'
+                , width: '100%'
+            });
+            //常规轮播
+            carousel.render({
+                elem: '#test3'
+                , interval: 1800
+                , anim: 'fade'
+                , height: '100%'
+                , width: '100%'
+            });
+            //常规轮播
+            carousel.render({
+                elem: '#test4'
+                , interval: 1800
+                , anim: 'fade'
+                , height: '100%'
+                , width: '100%'
             });
         });
     </script>

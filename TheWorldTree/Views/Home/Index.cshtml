@@ -18,9 +18,23 @@
             </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color:white;height:32%;">
-                <div style="height:100%;"></div>
-            </div>
+            @*<div class="grid-demo" style="background-color:white;height:32%;">
+                    <div style="height:100%;">
+                        <div id="he-plugin-standard" style="width:100%;height:100%;"></div>
+                        <script>
+                            WIDGET = {
+                                CONFIG: {
+                                    "layout": 1,
+                                    "background": 1,
+                                    "dataColor": "FFFFFF",
+                                    "borderRadius": 5,
+                                    "key": "d0b0b51f8e9e4fa9a967496917de4c78"
+                                }
+                            }
+                        </script>
+                        <script src="https://widget.heweather.net/standard/static/js/he-standard-common.js?v=1.1"></script>
+                    </div>
+                </div>*@
         </div>
     </div>
 
@@ -28,17 +42,43 @@
     <div class="layui-row layui-col-space5">
         <div class="layui-col-md3">
             <div class="grid-demo grid-demo-bg1" style="background-color: white;height: 32%;">
-                1/4
+                <div class="layui-carousel" id="test1">
+                    <div carousel-item="">
+                        <div style="background-color:aqua">条目1</div>
+                        <div style="background-color:blueviolet">条目2</div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color: white;height: 32%;">1/4</div>
+            <div class="grid-demo" style="background-color: white;height: 32%;">
+                <div class="layui-carousel" id="test2">
+                    <div carousel-item="">
+                        <div style="background-color:aqua">条目1</div>
+                        <div style="background-color:blueviolet">条目2</div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo grid-demo-bg1" style="background-color:white;height: 32%;">1/4</div>
+            <div class="grid-demo grid-demo-bg1" style="background-color:white;height: 32%;">
+                <div class="layui-carousel" id="test3">
+                    <div carousel-item="">
+                        <div style="background-color:aqua">条目1</div>
+                        <div style="background-color:blueviolet">条目2</div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo" style="background-color:white;height:32%;">1/4</div>
+            <div class="grid-demo" style="background-color:white;height:32%;">
+                <div class="layui-carousel" id="test4">
+                    <div carousel-item="">
+                        <div style="background-color:aqua">条目1</div>
+                        <div style="background-color:blueviolet">条目2</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -105,4 +145,5 @@
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
+
 </script>

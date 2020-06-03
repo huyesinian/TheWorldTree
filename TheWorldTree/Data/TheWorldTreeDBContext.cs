@@ -27,6 +27,7 @@ namespace TheWorldTree.Data
 
         public DbSet<TreeMsgBoard> TreeMsgBoard { get; set; }
 
+        public DbSet<TreeAlbumFolder> TreeAlbumFolder { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +39,7 @@ namespace TheWorldTree.Data
             modelBuilder.Entity<TreePress>().ToTable("TreePress");
             modelBuilder.Entity<TreeDic>().ToTable("TreeDic");
             modelBuilder.Entity<TreeMsgBoard>().ToTable("TreeMsgBoard");
+            modelBuilder.Entity<TreeAlbumFolder>().ToTable("TreeAlbumFolder");
         }
     }
 }
