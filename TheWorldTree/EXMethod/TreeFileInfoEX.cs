@@ -36,7 +36,48 @@ namespace TheWorldTree.EXMethod
             var Sum = SelResult.Count();//获取总数量
             if (searchInfo != null)
             {
-                SelResult = SelResult.Where(x => x.ID.Contains(searchInfo) || x.ContentID.Contains(searchInfo)).ToList();
+                var IDResult = SelResult.Where(x => x.ID.Contains(searchInfo)).ToList();
+                if (IDResult.Count<1)
+                {
+                    SelResult= SelResult.Where(x => x.ContentID.Contains(searchInfo)).ToList();
+                }
+                else
+                {
+                    SelResult = IDResult;
+                }
+            }
+            if (l==0)
+            {
+                l = SelResult.Count();
+            }
+            SelResult = Rubbish.GetPagingList(p, l, SelResult);
+            string output = Rubbish.GetJsonResult(Sum, SelResult);
+            return output;
+        }
+
+
+        /// <summary>
+        /// 这是查询所用方法
+        /// </summary>
+        /// <param name="p">页数</param>
+        /// <param name="l">条数</param>
+        /// <param name="searchInfo">查询条件</param>
+        /// <returns></returns>
+        public string SearchJsonList(int p, int l, string searchInfo)
+        {
+            var SelResult = Rubbish.GetList<TreeFileInfo>();//获取集合
+            var Sum = SelResult.Count();//获取总数量
+            if (searchInfo != null)
+            {
+                var IDResult = SelResult.Where(x => x.FileName.Contains(searchInfo)).ToList();
+                if (IDResult.Count >0)
+                {
+                    SelResult = IDResult;
+                }
+            }
+            if (l == 0)
+            {
+                l = SelResult.Count();
             }
             SelResult = Rubbish.GetPagingList(p, l, SelResult);
             string output = Rubbish.GetJsonResult(Sum, SelResult);

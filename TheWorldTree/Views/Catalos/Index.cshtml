@@ -3,6 +3,11 @@
     ViewData["Title"] = "目录";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <script type="text/html" id="topbar">
+        <div class="layui-btn-container">
+            <a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
+        </div>
+    </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -25,7 +30,7 @@
                     <input class="layui-input" name="Title" id="TitleReload" autocomplete="off">
                 </div>
                 <button class="layui-btn" data-type="reload">搜索</button>
-                <button class="layui-btn btn-active layui-btn-normal" data-type="tabAdd" >新增</button>
+               
             </div>
             <table class="layui-hide" id="List" lay-filter="TableList" ></table>
         </div>
@@ -38,6 +43,7 @@
         table.render({
             elem: '#List'
             , url: '@Url.Action("GetList")'
+            , toolbar: '#topbar'
             , response: {
                 statusName: 'StateCode' //规定数据状态的字段名称，默认：code
                 , statusCode: 0 //规定成功的状态码，默认：0
@@ -59,10 +65,19 @@
                 , { field: 'ID', title: 'ID',  sort: true, fixed: true }
                 , { field: 'Name', title: '名称' }
                 , { field: 'Alias', title: '别名' }
-                , { field: 'Sort', title: '排序号' }
+                , { field: 'Sort', title: '排序号', sort: true}
                 , { field: 'ParentId', title: '上级ID', sort: true }
                 , { field: 'Url', title: '链接' }
-                , { field: 'IsLast', title: '是否最后一项'}
+                , {
+                    field: 'IsLast', title: '是否最后一项', templet: function (d) {
+                        if (d.Issue == "1") {
+                            return "是";
+                        }
+                        else {
+                            return "否";
+                        }
+                    }
+                }
                 , { fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
 
             ]]
@@ -80,7 +95,7 @@
                     }
                     , where: {
                             searchInfo: titleReload.val()
-                       
+
                     }
                 }, 'data');
             }
@@ -88,6 +103,28 @@
         $('.TableSearch .layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
+        });
+
+         //头工具栏事件
+        table.on('toolbar(TableList)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2//这就是定义窗口类型的属性
+                        , title: "添加"
+                        , shadeClose: true
+                        , shade: 0.3
+                        , offset: "20%"
+                        , area: ['60%', '65%']
+                        , content: '@Url.Action("Create")'   //实际开发中传入真实iframe地址
+                    });
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
         });
 
         //监听工具条
@@ -129,29 +166,6 @@
                     , content: '@Url.Action("Edit")?id=' + data.ID   //实际开发中传入真实iframe地址
                 });
             }
-        });
-    });
-
-    layui.use('element', function () {
-        var $ = layui.jquery, element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
-        //触发事件
-        var ifra = '<iframe scrolling="yes" frameborder="0" src="' + "@Url.Action("Create")" + '" style="width:100%;height:100%"></iframe>';
-        var active = {
-            tabAdd: function () {
-                //新增一个Tab项
-                element.tabAdd('Catalos', {
-                    title: '添加目录'
-                    , content: ifra
-                    , id: 'CatalosCreate'
-                }
-                )
-                element.tabChange('Catalos', 'CatalosCreate')//跳转到指定标签页
-            }
-
-        };
-        $('.btn-active').on('click', function () {
-            var othis = $(this), type = othis.data('type');
-            active[type] ? active[type].call(this, othis) : '';
         });
     });
 

@@ -22,7 +22,7 @@
         <div class="layui-form-item">
             @Html.LabelLayuiFor(x => x.Issue)
             <div class="layui-input-block">
-                <input type="hidden" name="Issue" value="0">
+                <input type="hidden" name="Issue" id="Issue">
                 @Html.BoxLayuiFor(x => x.Issue, ViewBag.Issues as List<SelectListItem>, "checkbox")
             </div>
         </div>
@@ -79,8 +79,8 @@
         });
         //监听赋值事件
         form.on('checkbox(checkboxs)', function () {
-            var val = $('input:checkbox[name="Issue"]:checked').val();
-            if (val == "1") {
+            var val = $('input:checkbox[name="Issue"]').prop('checked');
+            if (val == true) {
                 form.val('press', {
                     "Issue": "1"
                 });

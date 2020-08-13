@@ -85,5 +85,11 @@ namespace TheWorldTree.Models
         /// </summary>
         [Display(Name = "缩略图路径")]
         public string Thum_file { get; set; }
+
+        /// <summary>
+        /// 缩略图相对路径
+        /// </summary>
+        [Display(Name = "缩略图相对路径")]
+        public string Thum_fileRel { get; set; }
     }
 }

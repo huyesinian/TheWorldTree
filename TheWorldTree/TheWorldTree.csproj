@@ -13,8 +13,9 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="wwwroot\fonts\chroma-ui\chroma-ui.svg" />
+    <None Include="wwwroot\fonts\icomoon.svg" />
     <None Include="wwwroot\js\opTable.js" />
-    <None Include="wwwroot\lib\opTable\icon\right.svg" />
     <None Include="wwwroot\lib\opTable\opTable.js" />
   </ItemGroup>
 
@@ -42,13 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\FrontAboutUs\Data\" />
-    <Folder Include="Areas\FrontAboutUs\Models\" />
     <Folder Include="Areas\FrontHome\Data\" />
     <Folder Include="Areas\FrontHome\Models\" />
-    <Folder Include="Areas\FrontPress\Data\" />
-    <Folder Include="Areas\FrontPress\Models\" />
-    <Folder Include="Areas\FrontPress\Views\" />
     <Folder Include="wwwroot\FileSave\2020-04-06\" />
   </ItemGroup>
 

@@ -21,13 +21,13 @@ namespace TheWorldTree.Models
         /// 字典名
         /// </summary>
         [Required]
-        [Display(Name ="")]
+        [Display(Name = "字典名")]
         public string NodeName { get; set; }
         /// <summary>
         /// 字典值
         /// </summary>
         [Required]
-        [Display(Name ="")]
+        [Display(Name = "字典值")]
         public string NodeCode { get; set; }
         /// <summary>
         /// 附属名1

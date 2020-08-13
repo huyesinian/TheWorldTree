@@ -31,7 +31,7 @@ namespace TheWorldTree.HtmlExtension
             label.MergeAttribute("class", "layui-form-label");
             label.MergeAttributes(new RouteValueDictionary(attributes));
             label.MergeAttribute("name", name);
-            label.MergeAttribute("id", name);
+
             var ss = helper.LabelFor(expression);
             label.InnerHtml.AppendHtml(ss);
             using (var sw = new System.IO.StringWriter())
@@ -150,10 +150,10 @@ namespace TheWorldTree.HtmlExtension
         /// <param name="expression"></param>
         /// <param name="attributes"></param>
         /// <returns></returns>
-        public static IHtmlContent BoxLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, IEnumerable<SelectListItem> items,string controlType ,int column = 0, object attributes = null)
+        public static IHtmlContent BoxLayuiFor<TModel, TValue>(this IHtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression, IEnumerable<SelectListItem> items, string controlType, int column = 0, object attributes = null)
         {
             //int moment = column;//暂存行数
-            string result="";
+            string result = "";
             if (items != null && items.Any())
             {
                 //int count = 1;
@@ -181,7 +181,7 @@ namespace TheWorldTree.HtmlExtension
                         result += sw.ToString();
                     }
                 }
-               
+
 
             }
             return new HtmlString(result);

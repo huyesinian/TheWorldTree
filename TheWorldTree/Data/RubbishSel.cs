@@ -160,8 +160,16 @@ namespace TheWorldTree.Data
         public string UrlConvertor(string strUrl)
         {
             Uri uri1 = new Uri(strUrl);
-            Uri uri2 = new Uri(@"E:\TheWorldTree\TheWorldTree\wwwroot\");
-            var url = uri2.MakeRelativeUri(uri1).ToString().Substring(uri2.MakeRelativeUri(uri1).ToString().IndexOf("FileSave"));
+            Uri uri2 = new Uri(@"E:\TheWorldTree\TheWorldTree\wwwroot");
+            var url = "";
+            if (strUrl.Contains("/FileSave"))
+            {
+                url = uri2.MakeRelativeUri(uri1).ToString().Substring(uri2.MakeRelativeUri(uri1).ToString().IndexOf("FileSave"));
+            }
+            else
+            {
+                url = uri2.MakeRelativeUri(uri1).ToString().Substring(uri2.MakeRelativeUri(uri1).ToString().IndexOf("ThumFileSave"));
+            }
             return url;
         }
     }

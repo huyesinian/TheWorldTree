@@ -42,7 +42,7 @@
                         <dd><a href="">安全设置</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">退了</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="OutSystem()">退了</a></li>
             </ul>
         </div>
 
@@ -154,6 +154,15 @@
                 , width: '100%'
             });
         });
+
+        function OutSystem() {
+            if (confirm("确定要退出吗？")) {
+                $.post("/Base/OutActionExecuting", function (data) {
+
+                }, "json");
+                window.location.href = '/Account/Index';
+            }
+        }
     </script>
     @RenderSection("Scripts", required: false)
 </body>

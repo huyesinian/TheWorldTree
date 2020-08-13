@@ -15,7 +15,7 @@
     <a class="layui-btn layui-btn-xs" lay-event="uploadImg">上传图片</a>
 </script>
 <script type="text/html" id="childbarDemo">
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
 </script>
 
 <div class="layui-tab" lay-filter="AlbumFolder" lay-allowclose="true">
@@ -70,37 +70,36 @@
                 , { field: 'Classify', title: '分类' }
                 , { fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
             ]]
-            //  展开显示表格 参数支持layui所有参数
-            , openTable: {
-                // 由于同时支持展开多个表格 组装唯一的id
-                elem: '#child'
-                , id: 'child' 
-                , url: '@Url.Action("GetFileList")?contentID=' + table.checkStatus('ID').data
-                , response: {
-                    statusName: 'StateCode' //规定数据状态的字段名称，默认：code
-                    , statusCode: 0 //规定成功的状态码，默认：0
-                    , msgName: 'Msg' //规定状态信息的字段名称，默认：msg
-                    , countName: 'Count' //规定数据总数的字段名称，默认：count
-                    , dataName: 'Data' //规定数据列表的字段名称，默认：data
+            ,openTable: function (itemData) {
+                return {
+                    // 由于同时支持展开多个表格 组装唯一的id
+                    elem: '#child'
+                    , id: 'child'
+                    , url: '@Url.Action("GetFileList")?contentID=' + itemData.ID
+                    , response: {
+                        statusName: 'StateCode' //规定数据状态的字段名称，默认：code
+                        , statusCode: 0 //规定成功的状态码，默认：0
+                        , msgName: 'Msg' //规定状态信息的字段名称，默认：msg
+                        , countName: 'Count' //规定数据总数的字段名称，默认：count
+                        , dataName: 'Data' //规定数据列表的字段名称，默认：data
+                    }
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        var jdata = JSON.parse(res);
+                        return {
+                            "StateCode": jdata.StateCode, //解析接口状态
+                            "Msg": jdata.Msg, //解析提示文本
+                            "Count": jdata.Count, //解析数据长度
+                            "Data": jdata.Data //解析数据列表
+                        };
+                    }
+                    , cols: [[
+                        { field: 'ID', title: 'ID' }
+                        , { field: 'FileName', title: '文件名称' }
+                        , { field: 'FileSize', title: '文件大小' }
+                        , { field: 'Expanded_name', title: '文件格式' }
+                        , { fixed: 'right', title: '操作', align: 'center', toolbar: '#childbarDemo' } //这里的toolbar值是模板元素的选择器
+                    ]]
                 }
-                , parseData: function (res) { //res 即为原始返回的数据
-                    var jdata = JSON.parse(res);
-                    return {
-                        "StateCode": jdata.StateCode, //解析接口状态
-                        "Msg": jdata.Msg, //解析提示文本
-                        "Count": jdata.Count, //解析数据长度
-                        "Data": jdata.Data //解析数据列表
-                    };
-                }
-                , cols: [[
-                    { field: 'ID', title: 'ID' }
-                    , { field: 'FileName', title: '文件名称' }
-                    , { field: 'FileSize', title: '文件大小' }
-                    , { field: 'Expanded_name', title: '文件格式' }
-                    , { fixed: 'right', title: '操作', align: 'center', toolbar: '#childbarDemo' } //这里的toolbar值是模板元素的选择器
-
-                ]]
-
             }
             , openType: 1
 
@@ -148,7 +147,7 @@
                     break;
             };
         });
-
+        
         //监听工具条
         table.on('tool(TableList)', function (obj) { //注：tool 是工具条事件名，TableList 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
@@ -197,6 +196,36 @@
                     , offset: "20%"
                     , area: ['60%', '65%']
                     , content: '@Url.Action("UploadImg")?id=' + data.ID   //实际开发中传入真实iframe地址
+                });
+            }
+        });
+
+          //监听工具条
+        table.on('tool(child)', function (obj) { //注：tool 是工具条事件名，TableList 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            if (layEvent === 'dels') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    //layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "@Url.Action("FileDelete")",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { id: data.ID },
+                        success: function (data) {
+                            if (data.type == 1) {
+                                layer.msg("删除成功");
+                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+
+                            }
+                            else {
+                                layer.msg("删除失败");
+                            }
+                        }
+                    });
+
                 });
             }
         });

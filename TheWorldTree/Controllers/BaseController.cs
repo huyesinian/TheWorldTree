@@ -44,5 +44,18 @@ namespace TheWorldTree.Controllers
             return user;
         }
 
+        /// <summary>
+        /// 用户登录退出
+        /// </summary>
+        /// <returns></returns>
+        public void OutActionExecuting()
+        {
+            var user = HttpContext.Session;
+            user.Remove("CurrentUser");
+            user.Clear();
+            return;
+
+        }
+
     }
 }

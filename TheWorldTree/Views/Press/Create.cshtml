@@ -23,7 +23,7 @@
     <div class="layui-form-item">
         @Html.LabelLayuiFor(x => x.Issue)
         <div class="layui-input-block">
-            <input type="hidden" name="Issue" value="0">
+            @*<input type="hidden" name="Issue" value="0">*@
             @Html.BoxLayuiFor(x => x.Issue, ViewBag.Issues as List<SelectListItem>, "checkbox")
         </div>
     </div>

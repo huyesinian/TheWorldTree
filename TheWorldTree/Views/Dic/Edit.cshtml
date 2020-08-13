@@ -1,0 +1,72 @@
+﻿@model TheWorldTree.Models.TreeDic
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "修改";
+    Layout = "~/Views/Shared/_Layout_Edit.cshtml";
+}
+
+    <form class="layui-form" lay-filter="catalos">
+        @Html.HiddenFor(x => x.ID)
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.DicCode)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.DicCode, null, Model.DicCode)
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.NodeName)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.NodeName, null, Model.NodeName)
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                @Html.LabelLayuiFor(x => x.NodeCode)
+                <div class="layui-input-block">
+                    @Html.EditorLayuiFor(x => x.NodeCode, null, Model.NodeCode)
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+            </div>
+        </div>
+    </form>
+    <script>
+    layui.use(['layer', 'layedit', 'form','element'], function () {
+        var form = layui.form;
+
+     ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data.type == 1) {
+                        layer.msg(data.message);
+                        LayUIMethod.IframeTurnOff();
+                    }
+                    else {
+                        layer.msg(data.message);
+                    }
+
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+      
+    });
+    </script>

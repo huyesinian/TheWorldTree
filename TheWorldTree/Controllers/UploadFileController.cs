@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using TheWorldTree.Data;
+using TheWorldTree.EXMethod;
 using TheWorldTree.Models;
 namespace TheWorldTree.Controllers
 {
@@ -16,10 +17,12 @@ namespace TheWorldTree.Controllers
     {
         private readonly IConfiguration _config;
         public RubbishSel Rubbish;
+        public ThumIMG thum;
         public TheWorldTreeDBContext _context;
         public UploadFileController(TheWorldTreeDBContext context, IConfiguration config)
         {
             Rubbish = new RubbishSel(context);
+            thum = new ThumIMG();
             _context = context;
             _config = config;
         }
@@ -40,50 +43,58 @@ namespace TheWorldTree.Controllers
                     if (formFile.Length > 0)
                     {
 
-                        var filePath = _config.GetSection("UploadUrl").Value + DateTime.Now.ToString("yyyy-MM-dd") + "/" + contentId + "/";
+                        var filePath = _config.GetSection("UploadUrl").Value + DateTime.Now.ToString("yyyy-MM-dd") + "/" + contentId + "/";//正常图片路径
+                        var thumFilePath = _config.GetSection("ThumUploadUrl").Value + DateTime.Now.ToString("yyyy-MM-dd") + "/" + contentId + "/";//缩略图路径
                         Directory.CreateDirectory(filePath);
+                        Directory.CreateDirectory(thumFilePath);
                         filePath += formFile.FileName;
+                        thumFilePath += formFile.FileName;
                         //var filePath = Path.GetTempFileName();//这里的路径可以通过配置文件进行修改,合成路径
                         using (var stream = System.IO.File.Create(filePath))
                         {
                             await formFile.CopyToAsync(stream);
-                            var TreeF = new TreeFileInfo()
-                            {
-                                ID = Guid.NewGuid().ToString(),
-                                ContentID = contentId,
-                                Content_Type = formFile.ContentType,
-                                FileName = formFile.FileName.Substring(0, formFile.FileName.LastIndexOf(".")),
-                                FileFullName = formFile.FileName,
-                                FileLength = formFile.Length,
-                                Expanded_name = formFile.FileName.Substring(formFile.FileName.LastIndexOf(".")),
-                                FilePath = filePath,
-                                FileRelPath = Rubbish.UrlConvertor(filePath),
-                                Creater = "",
-                                CreateTime = DateTime.Now
-                            };
-                            var imgI = new ImgInfo()
-                            {
+                        }
+                        var TreeF = new TreeFileInfo()
+                        {
+                            ID = Guid.NewGuid().ToString(),
+                            ContentID = contentId,
+                            Content_Type = formFile.ContentType,
+                            FileName = formFile.FileName.Substring(0, formFile.FileName.LastIndexOf(".")),
+                            FileFullName = formFile.FileName,
+                            FileLength = formFile.Length,
+                            Expanded_name = formFile.FileName.Substring(formFile.FileName.LastIndexOf(".")),
+                            FilePath = filePath,
+                            FileRelPath = "/" + Rubbish.UrlConvertor(filePath),
+                            Thum_file = thumFilePath,
+                            Thum_fileRel = "/" + Rubbish.UrlConvertor(thumFilePath),
+                            Creater = "",
+                            CreateTime = DateTime.Now
+                        };
+                        var imgI = new ImgInfo()
+                        {
 #if DEBUG
-                                src = "https://localhost:44391/" + "/" + TreeF.FileRelPath,
+                            src = "https://localhost:44391/" + "/" + TreeF.FileRelPath,
 #else
                                 src = "http://localhost:5241"+"/"+TreeF.FileRelPath,
 #endif
-                                title = ""
-                            };
+                            title = ""
+                        };
 
-                            if (Rubbish.Create(TreeF) == Suc)
+                        if (Rubbish.Create(TreeF) == Suc)
+                        {
+                            JsonImg jsonimg = new JsonImg()
                             {
-                                JsonImg jsonimg = new JsonImg()
-                                {
-                                    code = 0,
-                                    msg = "",
-                                    data = imgI
-                                };
-                                var jsonresult = JsonConvert.SerializeObject(jsonimg);
-                                return Json(jsonresult);
-                            }
-
+                                code = 0,
+                                msg = "",
+                                data = imgI
+                            };
+                            var jsonresult = JsonConvert.SerializeObject(jsonimg);
+                            thum.GenerateThumb(filePath, thumFilePath, 100, 100, "Cut");
+                            return Json(jsonresult);
                         }
+
+
+
                     }
                 }
             }

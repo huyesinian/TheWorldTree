@@ -29,6 +29,12 @@ namespace TheWorldTree.Data
 
         public DbSet<TreeAlbumFolder> TreeAlbumFolder { get; set; }
 
+        public DbSet<TreeUser> TreeUser { get; set; }
+
+        public DbSet<TreeRole> TreeRole { get; set; }
+
+        public DbSet<TreePermission> TreePermission { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +46,10 @@ namespace TheWorldTree.Data
             modelBuilder.Entity<TreeDic>().ToTable("TreeDic");
             modelBuilder.Entity<TreeMsgBoard>().ToTable("TreeMsgBoard");
             modelBuilder.Entity<TreeAlbumFolder>().ToTable("TreeAlbumFolder");
+            modelBuilder.Entity<TreeUser>().ToTable("TreeUser");
+            modelBuilder.Entity<TreeRole>().ToTable("TreeRole");
+            modelBuilder.Entity<TreePermission>().ToTable("TreePermission");
+
         }
     }
 }

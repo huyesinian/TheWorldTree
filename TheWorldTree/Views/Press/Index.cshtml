@@ -3,6 +3,11 @@
     ViewData["Title"] = "新闻";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <script type="text/html" id="topbar">
+        <div class="layui-btn-container">
+            <a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
+        </div>
+    </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -25,7 +30,6 @@
                     <input class="layui-input" name="Title" id="TitleReload" autocomplete="off">
                 </div>
                 <button class="layui-btn" data-type="reload">搜索</button>
-                <button class="layui-btn btn-active layui-btn-normal" data-type="tabAdd" >新增</button>
             </div>
             <table class="layui-hide" id="List" lay-filter="TableList" ></table>
         </div>
@@ -38,6 +42,7 @@
         table.render({
             elem: '#List'
             , url: '@Url.Action("GetList")'
+            , toolbar: '#topbar'
             , response: {
                 statusName: 'StateCode' //规定数据状态的字段名称，默认：code
                 , statusCode: 0 //规定成功的状态码，默认：0
@@ -59,7 +64,16 @@
                 , { field: 'ID', title: 'ID',  sort: true, fixed: true }
                 , { field: 'Title', title: '标题',  sort: true }
                 , { field: 'Description', title: '描述'}
-                , { field: 'Issue', title: '是否发布', sort: true }
+                , {
+                    field: 'Issue', title: '是否发布', sort: true, templet: function (d) {
+                        if (d.Issue == "1") {
+                            return "是";
+                        }
+                        else {
+                            return "否";
+                        }
+                    }
+                }
                 , { fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo' } //这里的toolbar值是模板元素的选择器
 
             ]]
@@ -77,7 +91,7 @@
                     }
                     , where: {
                             searchInfo: titleReload.val()
-                       
+
                     }
                 }, 'data');
             }
@@ -85,6 +99,28 @@
         $('.TableSearch .layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
+        });
+
+        //头工具栏事件
+        table.on('toolbar(TableList)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2//这就是定义窗口类型的属性
+                        , title: "添加"
+                        , shadeClose: true
+                        , shade: 0.3
+                        , offset: "20%"
+                        , area: ['60%', '65%']
+                        , content: '@Url.Action("Create")'   //实际开发中传入真实iframe地址
+                    });
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
         });
 
         //监听工具条
@@ -125,62 +161,10 @@
                     , area: ['60%', '65%']
                     //, btn: ['确定', '取消']
                     , content: '@Url.Action("Edit")?id=' + data.ID   //实际开发中传入真实iframe地址
-                    @*, yes: function (index, layero) {
-                        let submitID = 'LAY-user-front-submit'
-                        let submit = layero.find('iframe').contents().find('#' + submitID);
-                        submit.trigger('click');
-                        
-                        var form = layer.getChildFrame('form', index);//通过该对象可以获取iframe中的dom元素
-                        data.ID = form[0]['ID'].value;
-                        data.Title = form[0]['Title'].value;
-                        data.Description = form[0]['Description'].value;
-                        data.Issue = form[0]['Issue'].value;
-                        data.MainBody = form[0]['MainBody'].value;
-                        $.ajax({
-                            type: 'post',
-                            url: '@Url.Action("Edit")',  //开发时传入真实接口
-                            data: data,
-                            dataType: 'json',
-                            success: function (data) {
-                                layer.msg(data.message);
-                                if (data.type == 0) {
-                                    location.reload();//表格的
-                                }
-                               
-                            },
-                            error: function () {
-                                layer.msg("出现错误");
-                                return false;
-                            }
-                        })
-                        layer.close(index); //关闭弹层
-                    }*@
                 });
             }
         });
     });
 
-    layui.use('element', function () {
-        var $ = layui.jquery, element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
-        //触发事件
-        var ifra = '<iframe scrolling="yes" frameborder="0" src="' + "@Url.Action("Create")" + '" style="width:100%;height:100%"></iframe>';
-        var active = {
-            tabAdd: function () {
-                //新增一个Tab项
-                element.tabAdd('Press', {
-                    title: '添加新闻'
-                    , content: ifra
-                    , id: 'PressCreate'
-                }
-                )
-                element.tabChange('Press', 'PressCreate')//跳转到指定标签页
-            }
-
-        };
-        $('.btn-active').on('click', function () {
-            var othis = $(this), type = othis.data('type');
-            active[type] ? active[type].call(this, othis) : '';
-        });
-    });
 
 </script>

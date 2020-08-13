@@ -50,7 +50,7 @@ namespace TheWorldTree.Controllers
         /// <param name="limit"></param>
         /// <param name="contentID"></param>
         /// <returns></returns>
-        public JsonResult GetFileList(int page, int limit, string contentID)
+        public JsonResult GetFileList( int limit, string contentID, int page= 1)
         {
             var result = treeFileInfoEX.GetJsonList(page, limit, contentID);
             return Json(result);
@@ -150,7 +150,7 @@ namespace TheWorldTree.Controllers
         }
         #endregion
 
-        #region 删除
+        #region 文件夹删除
         [HttpPost]
         public JsonResult Delete(string id)
         {
@@ -161,7 +161,43 @@ namespace TheWorldTree.Controllers
                     TreeAlbumFolder catalos = albumFolderEX.GetList<TreeAlbumFolder>().Where(x => x.ID == id).FirstOrDefault();
                     if (albumFolderEX.Delete(catalos) == Suc)
                     {
+                        
+                        return Json(JsonHandler.CreateMessage(Suc, "删除成功"));
+                    }
+                    else
+                    {
 
+                        return Json(JsonHandler.CreateMessage(Def, "删除失败"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + ex.ToString());
+                    return Json(JsonHandler.CreateMessage(Def, "删除失败" + ex.ToString()));
+                }
+
+            }
+            else
+            {
+                return Json(JsonHandler.CreateMessage(Def, "请选择要删除的数据"));
+            }
+
+        }
+        #endregion
+
+        #region 文件删除
+        [HttpPost]
+        public JsonResult FileDelete(string id)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                try
+                {
+                    TreeFileInfo tf = albumFolderEX.GetList<TreeFileInfo>().Where(x => x.ID == id).FirstOrDefault();
+                    if (albumFolderEX.Delete(tf) == Suc)
+                    {
+                        System.IO.File.Delete(tf.FilePath);
+                        System.IO.File.Delete(tf.Thum_file);
                         return Json(JsonHandler.CreateMessage(Suc, "删除成功"));
                     }
                     else
