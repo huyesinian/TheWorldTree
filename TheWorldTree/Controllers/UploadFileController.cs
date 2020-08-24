@@ -33,11 +33,21 @@ namespace TheWorldTree.Controllers
             return View();
         }
 
-        public async Task<JsonResult> UploadIMG(IFormFileCollection files, string contentId = null)
+        public async Task<JsonResult> UploadIMG(IFormFileCollection files, string contentId = null,int width=100,int height=100,string useType=null)
         {
             files = Request.Form.Files;
             try
             {
+                if (!string.IsNullOrWhiteSpace(useType))//判断有无类型，有类型就要判断有没有数据，有就删除
+                {
+                    var result = _context.TreeFileInfo.Where(x => x.ContentID == contentId && x.UseType == useType);
+                    if (result != null)
+                    {
+                        _context.RemoveRange(result);
+
+                    }
+                  
+                }
                 foreach (var formFile in files)
                 {
                     if (formFile.Length > 0)
@@ -68,7 +78,9 @@ namespace TheWorldTree.Controllers
                             Thum_file = thumFilePath,
                             Thum_fileRel = "/" + Rubbish.UrlConvertor(thumFilePath),
                             Creater = "",
-                            CreateTime = DateTime.Now
+                            CreateTime = DateTime.Now,
+                            UseType= useType
+
                         };
                         var imgI = new ImgInfo()
                         {
@@ -88,12 +100,13 @@ namespace TheWorldTree.Controllers
                                 msg = "",
                                 data = imgI
                             };
+                            string bs64 = "";
                             var jsonresult = JsonConvert.SerializeObject(jsonimg);
-                            thum.GenerateThumb(filePath, thumFilePath, 100, 100, "Cut");
+                            thum.GenerateThumb(filePath, thumFilePath, width, height, "Cut",ref bs64);
+                            TreeF.IMGBase64 = bs64;
+                            Rubbish.Edit(TreeF);
                             return Json(jsonresult);
                         }
-
-
 
                     }
                 }

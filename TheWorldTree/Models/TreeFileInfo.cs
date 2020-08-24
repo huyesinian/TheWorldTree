@@ -91,5 +91,17 @@ namespace TheWorldTree.Models
         /// </summary>
         [Display(Name = "缩略图相对路径")]
         public string Thum_fileRel { get; set; }
+
+        /// <summary>
+        /// IMGBase64
+        /// </summary>
+        [Display(Name = "IMGBase64")]
+        public string IMGBase64 { get; set; }
+
+        /// <summary>
+        /// 使用类型
+        /// </summary>
+        [Display(Name = "使用类型")]
+        public string UseType { get; set; }
     }
 }

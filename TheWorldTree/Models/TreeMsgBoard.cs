@@ -12,6 +12,12 @@ namespace TheWorldTree.Models
     public class TreeMsgBoard : TreeOperate
     {
         /// <summary>
+        /// 关联ID
+        /// </summary>
+        [Display(Name = "关联ID")]
+        public string ContentId { get; set; }
+
+        /// <summary>
         /// 姓名
         /// </summary>
         [Display(Name = "姓名")]

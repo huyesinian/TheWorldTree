@@ -1,0 +1,86 @@
+﻿@model TheWorldTree.Models.TreeSay
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "修改";
+    Layout = "~/Views/Shared/_Layout_Edit.cshtml";
+}
+
+<form class="layui-form" lay-filter="Say">
+    @Html.HiddenFor(x => x.ID)
+    @Html.HiddenFor(x => x.Creater)
+    @Html.HiddenFor(x => x.CreateTime)
+    <div class="layui-form-item">
+        @Html.TextareaLayuiFor(x => x.SayContent, Model.SayContent, "content")
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" id="FirstImg">
+                <i class="layui-icon">&#xe67c;</i>添加配图
+            </button>
+            <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['layer', 'layedit', 'form', 'element', 'upload'], function () {
+        var layedit = layui.layedit;
+        var element = layui.element;
+        var form = layui.form;
+        var imgUrl = "@Url.Action("UploadIMG", "UploadFile")?contentId=" + $("#ID").val();
+        layedit.set({
+            uploadImage: {
+                url: imgUrl //接口url
+                , type: 'post' //默认post
+            }
+        });
+
+        var index = layedit.build('SayContent', {}); //建立编辑器
+        layedit.setContent(index, '@Html.Raw(Model.SayContent)');
+        form.verify({
+            content: function (value) {
+                return layedit.sync(index);
+            }
+        });
+
+        ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data.type == 1) {
+                        layer.msg(data.message);
+                        LayUIMethod.IframeTurnOff();
+
+                    }
+                    else {
+                        layer.msg(data.message);
+                    }
+
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+        $("#FirstImg").click(function () {
+            var id ="@Model.ID";
+            layer.open({
+                type: 2//这就是定义窗口类型的属性
+                , title: "上传图片"
+                , shadeClose: true
+                , shade: 0.3
+                , offset: "20%"
+                , area: ['60%', '65%']
+                , content: '@Url.Action("UploadImg", "AlbumFolder")?id=' + id   //实际开发中传入真实iframe地址
+            });
+        });
+
+    });
+
+
+</script>

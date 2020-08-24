@@ -5,38 +5,45 @@
     Layout = "~/Views/Shared/_Layout_Edit.cshtml";
 }
 
-    <form class="layui-form" lay-filter="press">
-        @Html.HiddenFor(x => x.ID)
-        <div class="layui-form-item">
-            @Html.LabelLayuiFor(x => x.Title)
-            <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Title, null, Model.Title)
-            </div>
+<form class="layui-form" lay-filter="press">
+    @Html.HiddenFor(x => x.ID)
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" id="FirstImg">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
         </div>
-        <div class="layui-form-item">
-            @Html.LabelLayuiFor(x => x.Description)
-            <div class="layui-input-block">
-                @Html.EditorLayuiFor(x => x.Description, null, Model.Title)
-            </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelLayuiFor(x => x.Title)
+        <div class="layui-input-block">
+            @Html.EditorLayuiFor(x => x.Title, null, Model.Title)
         </div>
-        <div class="layui-form-item">
-            @Html.LabelLayuiFor(x => x.Issue)
-            <div class="layui-input-block">
-                <input type="hidden" name="Issue" id="Issue">
-                @Html.BoxLayuiFor(x => x.Issue, ViewBag.Issues as List<SelectListItem>, "checkbox")
-            </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelLayuiFor(x => x.Description)
+        <div class="layui-input-block">
+            @Html.EditorLayuiFor(x => x.Description, null, Model.Description)
         </div>
-        <div class="layui-form-item">
-            @Html.TextareaLayuiFor(x => x.MainBody, Model.MainBody, "content")
+    </div>
+    <div class="layui-form-item">
+        @Html.LabelLayuiFor(x => x.Issue)
+        <div class="layui-input-block">
+            <input type="hidden" name="Issue" id="Issue">
+            @Html.BoxLayuiFor(x => x.Issue, ViewBag.Issues as List<SelectListItem>, "checkbox")
         </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
-            </div>
+    </div>
+    <div class="layui-form-item">
+        @Html.TextareaLayuiFor(x => x.MainBody, Model.MainBody, "content")
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
         </div>
-    </form>
+    </div>
+</form>
     <script>
-    layui.use(['layer', 'layedit', 'form','element'], function () {
+        layui.use(['layer', 'layedit', 'form', 'element', 'upload'], function () {
         var layedit = layui.layedit;
         var element = layui.element;
         var form = layui.form;
@@ -47,10 +54,25 @@
                 , type: 'post' //默认post
             }
         });
-        var index =layedit.build('MainBody', {}); //建立编辑器
+
+        var index = layedit.build('MainBody', {}); //建立编辑器
+         layedit.setContent(index,'@Html.Raw(Model.MainBody)');
         form.verify({
             content: function (value) {
                 return layedit.sync(index);
+            }
+        });
+        var upload = layui.upload;
+        var firstImgUrl="@Url.Action("UploadIMG", "UploadFile")?contentId=" + $("#ID").val()+"&width=420&height=280&useType=导图";
+        //执行上传
+        var uploadInst = upload.render({
+            elem: '#FirstImg' //绑定元素
+            , url: firstImgUrl //上传接口
+            , done: function (res) {
+                return layer.msg("成功");
+            }
+            , error: function () {
+                return layer.msg("失败");
             }
         });
          ///提交数据
@@ -64,7 +86,7 @@
                     if (data.type == 1) {
                         layer.msg(data.message);
                         LayUIMethod.IframeTurnOff();
-                     
+
                     }
                     else {
                         layer.msg(data.message);
@@ -91,9 +113,7 @@
                 });
             }
         });
-        form.val('press', {
-            "MainBody": "@Html.Raw(Model.MainBody)"
-        });
+
 
     });
 

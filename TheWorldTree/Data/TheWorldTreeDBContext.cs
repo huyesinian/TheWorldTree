@@ -35,6 +35,12 @@ namespace TheWorldTree.Data
 
         public DbSet<TreePermission> TreePermission { get; set; }
 
+        public DbSet<TreeSubscription> TreeSubscription { get; set; }
+
+        public DbSet<TreeSay> TreeSay { get; set; }
+
+        public DbSet<TreeGALike> TreeGALike { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +55,9 @@ namespace TheWorldTree.Data
             modelBuilder.Entity<TreeUser>().ToTable("TreeUser");
             modelBuilder.Entity<TreeRole>().ToTable("TreeRole");
             modelBuilder.Entity<TreePermission>().ToTable("TreePermission");
+            modelBuilder.Entity<TreeSubscription>().ToTable("TreeSubscription");
+            modelBuilder.Entity<TreeSay>().ToTable("TreeSay");
+            modelBuilder.Entity<TreeGALike>().ToTable("TreeGALike");
 
         }
     }

@@ -1,0 +1,107 @@
+﻿@model TheWorldTree.Models.TreeMsgBoard
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "说说";
+    Layout = "~/Views/Shared/_Layout_Front.cshtml";
+}
+<body>
+    <div class="content whisper-content">
+        <div class="cont">
+            <div class="whisper-list">
+                @foreach (var item in ViewBag.TreeForntSays)
+                {
+                    <div class="item-box">
+                        <div class="item">
+                            <div class="whisper-title">
+                                <i class="layui-icon layui-icon-date"></i><span class="date">@item.TreeSays.CreateTime</span>
+                            </div>
+                            <p class="text-cont">
+                                @(Html.Raw(item.TreeSays.SayContent))
+                            </p>
+                            <div class="img-box">
+                                @foreach (var imgs in item.TreeFileInfos)
+                                {
+                                    <img src="@imgs.FileRelPath">
+                                }
+                            </div>
+                            <div class="op-list">
+
+                                <p class="like"><i class="layui-icon layui-icon-praise"></i><span>@item.TreeSays.GiveLikeS</span></p>
+
+                                <p class="edit"><i class="layui-icon layui-icon-reply-fill"></i><span>@item.TreeSays.CommentS</span></p>
+                                <p class="off"><span>展开</span><i class="layui-icon layui-icon-down"></i></p>
+                            </div>
+                        </div>
+                        <div class="review-version layui-hide">
+                            <div class="form">
+                                <img src="../../img/header2.png">
+                                <div class="form">
+                                    <form class="layui-form" action="">
+                                        <div class="layui-form-item layui-form-text">
+                                            <div class="layui-input-block">
+                                                @Html.TextareaLayuiFor(x => x.MsgContent, null, null, new { placeholder = "既然来了，就说几句" })
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block" style="text-align: right;">
+                                                <a class="layui-btn definite" lay-submit lay-filter="*">立即提交</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="list-cont">
+                                @foreach (var msgs in item.TreeMsgBoards)
+                                {
+                                    <div class="cont">
+                                        <div class="img">
+                                            <img src="../../img/header.png" alt="">
+                                        </div>
+                                        <div class="text">
+                                            <p class="tit"><span class="name">@msgs.Creater</span><span class="data">@msgs.CreateTime</span></p>
+                                            <p class="ct">@msgs.MsgContent</p>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+              
+            </div>
+            <div id="demo" style="text-align: center;"></div>
+        </div>
+    </div>
+
+</body>
+<script>
+    layui.use(['layer', 'form'], function () {
+        var form = layui.form;
+        ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("MsgBoard")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data == 1) {
+                        $("#MsgContent").val("");
+                        layer.msg("提交成功");
+                        window.location.reload();
+                    }
+                    else {
+                        layer.msg(data);
+                    }
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+
+    });
+</script>

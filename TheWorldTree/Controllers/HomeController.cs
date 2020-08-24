@@ -49,15 +49,17 @@ namespace TheWorldTree.Controllers
                     _context.Add(treeIPInfo);
                     _context.SaveChangesAsync();
                 }
+                var Article = _context.TreePress.ToList();//获取文章
+                ViewBag.Articles = Article.Count();//文章数
+                ViewBag.PubArticle = Article.Where(x => x.Issue == "1").ToList();//已发表文章
+                ViewBag.NoPubArticle = Article.Where(x => x.Issue == "0").ToList();//草稿
+                ViewBag.Subs = _context.TreeSubscription.Count();//订阅数
                 ViewBag.IPInfo = JsonConvert.SerializeObject(TreeBaseEX.GetIPinfo());//获取当前年份的每月访问人数
             }
             catch (Exception ex)
             {
                 Logger.Info(ex.ToString());
             }
-
-           
-            
             return View();
         }
 

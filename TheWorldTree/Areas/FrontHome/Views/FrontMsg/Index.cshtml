@@ -1,0 +1,85 @@
+﻿@model TheWorldTree.Models.TreeMsgBoard
+@using TheWorldTree.HtmlExtension;
+@{
+    ViewData["Title"] = "留言板";
+    Layout = "~/Views/Shared/_Layout_Front.cshtml";
+}
+<body>
+    <div class="content whisper-content leacots-content">
+        <div class="cont w1000">
+            <div class="whisper-list">
+                <div class="item-box">
+                    <div class="review-version">
+                        <div class="form-box">
+                            <img class="banner-img" src="../../img/liuyan.jpg">
+                            <div class="form">
+                                <form class="layui-form" action="">
+                                    @Html.HiddenFor(x => x.ID)
+                                    <div class="layui-form-item layui-form-text">
+                                        <div class="layui-input-block">
+                                            @Html.TextareaLayuiFor(x => x.MsgContent, null, null, new { placeholder = "既然来了，就说几句" })
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="text-align: right;">
+                                            <a class="layui-btn definite" lay-submit lay-filter="*">立即提交</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="volume">
+                            全部留言 <span>@ViewBag.ContentSums</span>
+                        </div>
+                        <div class="list-cont">
+                            @foreach (var item in ViewBag.Msgs)
+                            {
+                                <div class="cont">
+                                    <div class="img">
+                                        <img src="../../img/header.png" alt="">
+                                    </div>
+                                    <div class="text">
+                                        <p class="tit"><span class="name">@item.UserIP</span><span class="data">@item.CreateTime</span></p>
+                                        <p class="ct">@item.MsgContent</p>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="demo" style="text-align: center;"></div>
+        </div>
+    </div>
+
+</body>
+<script>
+    layui.use(['layer', 'form'], function () {
+        var form = layui.form;
+        ///提交数据
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '@Url.Action("MsgBoard")',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                success: function (data) {
+                    if (data == 1) {
+                        $("#MsgContent").val("");
+                        layer.msg("提交成功");
+                        window.location.reload();
+                    }
+                    else {
+                        layer.msg(data);
+                    }
+                },
+                error: function (dataError) {
+                    alert(dataError)
+                }
+
+            })
+        });
+
+    });
+</script>

@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\opTable.js" />
     <Content Remove="wwwroot\nlog.config" />
   </ItemGroup>
 
@@ -15,11 +14,18 @@
     </None>
     <None Include="wwwroot\fonts\chroma-ui\chroma-ui.svg" />
     <None Include="wwwroot\fonts\icomoon.svg" />
+    <None Include="wwwroot\js\chromagallery.pkgd.min.js" />
+    <None Include="wwwroot\js\echarts.min.js" />
+    <None Include="wwwroot\js\hxNav.js" />
     <None Include="wwwroot\js\opTable.js" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\menu.js" />
+    <None Include="wwwroot\js\mm.js" />
     <None Include="wwwroot\lib\opTable\opTable.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="MailKit" Version="2.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
@@ -27,7 +33,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0-preview.4.20261.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0-preview.7.20370.3" />
     <PackageReference Include="MimeKit" Version="2.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.6.8" />

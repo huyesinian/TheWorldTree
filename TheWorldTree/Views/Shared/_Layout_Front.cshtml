@@ -6,78 +6,72 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <title>@ViewData["Title"] - TheWorldTree</title>
     <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
-    <link href="~/lib/front/main.css" rel="stylesheet" />
-    <link href="~/css/chromagallery.min.css" rel="stylesheet" />
-    <link href="~/css/default.css" rel="stylesheet" />
-    <link href="~/css/normalize.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
     <script src="~/lib/layui/layui.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
+    <!--加载meta IE兼容文件-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
-    <!-- header -->
-    <div class="header_box">
-        <div class="header">
-            <ul class="app-header">
-                <li class="app-header-menuicon">
-                    <i class="layui-icon layui-icon-more-vertical"></i>
-                </li>
-            </ul>
+    <div class="header">
+        <div class="menu-btn">
+            <div class="menu"></div>
+        </div>
+        <h1 class="logo">
+            <a href="index.html">
+                <span>MYBLOG</span>
+                <img src="/img/logo.png">
+            </a>
+        </h1>
+        <div class="nav">
+            <a href="@Url.Action("Index","FrontHome")" class="active">文章</a>
+            <a href="whisper.html">微语</a>
+            <a href="@Url.Action("Index","FrontMsg")">留言</a>
+            <a href="album.html">相册</a>
+            <a href="about.html">关于</a>
+        </div>
+        <ul class="layui-nav header-down-nav">
+            <li class="layui-nav-item"><a href="@Url.Action("Index","FrontHome")" class="active">文章</a></li>
+            <li class="layui-nav-item"><a href="whisper.html">微语</a></li>
+            <li class="layui-nav-item"><a href="@Url.Action("Index","FrontMsg")">留言</a></li>
+            <li class="layui-nav-item"><a href="album.html">相册</a></li>
+            <li class="layui-nav-item"><a href="about.html">关于</a></li>
+        </ul>
+    </div>
+
+    <div class="banner">
+        <div class="cont w1000">
+            <div class="title">
+                <h3>MY<br />BLOG</h3>
+                <h4>The World Tree</h4>
+            </div>
+            <div class="amount">
+
+            </div>
         </div>
     </div>
-    <!-- end-header -->
-    <!-- content -->
-    <div class="content" style="height:90%">
+    <div class="content">
         @RenderBody()
     </div>
     <!-- end-content -->
-    <!-- footer -->
-    <div class="footer" style="position: fixed; bottom: 0;width:100%">
-        © TheWorldTree.com
-    </div>
-    <!-- end-footer -->
-
-    <script>
-        layui.use(['jquery', 'element','flow'], function () {
-            var flow = layui.flow;
-            flow.load({
-                elem: '#LAY_image' //流加载容器
-                , scrollElem: '#LAY_image' //滚动条所在元素，一般不用填，此处只是演示需要。
-                , done: function (page, next) { //执行下一页的回调
-                    //模拟数据插入
-                    setTimeout(function () {
-                        var lis = [];
-                        $.ajax({
-                            url: '@Url.Action("GetImage")',
-                            type: 'post',
-                            dataType: 'json',
-                            async: false,
-                            data: {page:page,sum:8},
-                            success: function (data) {
-                                var result = JSON.parse(data);
-                                var imginfo = result.Data;
-                                if (result.StateCode == 0) {
-                                    for (var i = 0; i < result.Count; i++) {
-                                        lis.push('<li><img src="' + imginfo[i].Thum_fileRel + '?v=' + ((page - 1) * 8 + i + 1) + '" alt="' + imginfo[i].FileName + '" data-largesrc="' + imginfo[i].FileRelPath + '?v=' + ((page - 1) * 8 + i + 1) +'"></li>')
-                                    }
-                                  
-                                }
-                                else {
-                                    alert("到底了");
-                                }
-                            },
-                            error: function (dataError) {
-                                alert(dataError)
-                            }
-                        });
-
-                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-                        next(lis.join(''), page < 10); //假设总页数为 10
-                    }, 500);
-                }
+   
+    <script type="text/javascript">
+        var sums=@ViewBag.ContentSums;
+        //JavaScript代码区域
+        layui.config({
+            base: '/js/'  // 根据你自己的目录设置
+        });
+        layui.use(['element', 'laypage', 'jquery', 'menu'], function () {
+            element = layui.element, laypage = layui.laypage, $ = layui.$, menu = layui.menu;
+            laypage.render({
+                elem: 'demo'
+                , count: sums  //数据总数，从服务端得到
             });
-
+            menu.init();
+            menu.off();
+            menu.submit();
         });
     </script>
     @RenderSection("Scripts", required: false)

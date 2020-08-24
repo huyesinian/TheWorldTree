@@ -246,6 +246,9 @@ namespace TheWorldTree.Migrations
                     b.Property<decimal>("FileSize")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<string>("IMGBase64")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Thum_file")
                         .HasColumnType("nvarchar(max)");
 
@@ -257,6 +260,9 @@ namespace TheWorldTree.Migrations
 
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UseType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -297,6 +303,42 @@ namespace TheWorldTree.Migrations
                     b.ToTable("TreeFileSuffixType");
                 });
 
+            modelBuilder.Entity("TheWorldTree.Models.TreeGALike", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ContentID")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Creater")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("LikeMan")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("UpdateOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UseModule")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TreeGALike");
+                });
+
             modelBuilder.Entity("TheWorldTree.Models.TreeIPInfo", b =>
                 {
                     b.Property<string>("ID")
@@ -319,6 +361,9 @@ namespace TheWorldTree.Migrations
                     b.Property<string>("ID")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<string>("ContentId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
@@ -455,6 +500,70 @@ namespace TheWorldTree.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("TreeRole");
+                });
+
+            modelBuilder.Entity("TheWorldTree.Models.TreeSay", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("CommentS")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Creater")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("GiveLikeS")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SayContent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(888)")
+                        .HasMaxLength(888);
+
+                    b.Property<string>("UpdateOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TreeSay");
+                });
+
+            modelBuilder.Entity("TheWorldTree.Models.TreeSubscription", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Creater")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("UpdateOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TreeSubscription");
                 });
 
             modelBuilder.Entity("TheWorldTree.Models.TreeUser", b =>
