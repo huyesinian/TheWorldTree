@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Apps.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TheWorldTree.Data;
 using TheWorldTree.EXMethod;
 using TheWorldTree.Models;
@@ -44,20 +45,34 @@ namespace TheWorldTree.Controllers
         #endregion
 
         #region 创建
-        [HttpGet]
-        public IActionResult Create()
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    TreeGALike gal = new TreeGALike()
+        //    {
+        //        ID = Guid.NewGuid().ToString()
+        //    };
+
+        //    return View(gal);
+        //}
+
+        /// <summary>
+        /// 创建点赞信息
+        /// </summary>
+        /// <param name="contentId">关联id</param>
+        /// <param name="useMoudle">使用模块</param>
+        /// <param name="likeSum">点赞数</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult Create(string contentId,string useMoudle,int likeSum)
         {
             TreeGALike gal = new TreeGALike()
             {
-                ID = Guid.NewGuid().ToString()
+                ID = Guid.NewGuid().ToString(),
+                ContentID= contentId,
+                LikeMan= GetCurrentU(),
+                UseModule= useMoudle
             };
-         
-            return View(gal);
-        }
-
-        [HttpPost]
-        public JsonResult Create(TreeGALike gal)
-        {
             gal.Creater = GetCurrentU();
             gal.CreateTime = DateTime.Now;
             if (gal != null && ModelState.IsValid)
@@ -66,6 +81,14 @@ namespace TheWorldTree.Controllers
                 {
                     if (treeGALikeEX.Create(gal) == Suc)
                     {
+                        //创建成功之后还需要修改点赞数
+                        TreeSay treeSay = _context.TreeSay.Where(x => x.ID == contentId).FirstOrDefault();
+                        if (treeSay!=null)
+                        {
+                            treeSay.GiveLikeS = likeSum;
+                            _context.Entry(treeSay).State = EntityState.Modified;
+                            _context.SaveChanges();
+                        }
                         return Json(JsonHandler.CreateMessage(Suc, "创建成功"));
                     }
                     else
@@ -86,57 +109,32 @@ namespace TheWorldTree.Controllers
         }
         #endregion
 
-        #region 修改
-        [HttpGet]
-        public IActionResult Edit(string id)
-        {
-            TreeGALike gal = treeGALikeEX.GetList<TreeGALike>().Where(x => x.ID == id).FirstOrDefault();
-           
-            return View(gal);
-        }
-
-        [HttpPost]
-        public JsonResult Edit(TreeGALike gal)
-        {
-            gal.UpdateOne = GetCurrentU();
-            gal.UpdateTime = DateTime.Now;
-            if (gal != null && ModelState.IsValid)
-            {
-                try
-                {
-                    if (treeGALikeEX.Edit(gal) == Suc)
-                    {
-                        return Json(JsonHandler.CreateMessage(Suc, "修改成功"));
-                    }
-                    else
-                    {
-                        return Json(JsonHandler.CreateMessage(Def, "修改失败"));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Info(MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + MethodBase.GetCurrentMethod().Name + ":" + ex.ToString());
-                    return Json(JsonHandler.CreateMessage(Def, "修改失败" + ex.ToString()));
-                }
-
-            }
-            return Json(JsonHandler.CreateMessage(1, /*GetEntityError()*/""));
-
-        }
-        #endregion
+      
 
         #region 删除
+        /// <summary>
+        /// 删除点赞信息
+        /// </summary>
+        /// <param name="contentId">关联id</param>
+        /// <returns></returns>
         [HttpPost]
-        public JsonResult Delete(string id)
+        public JsonResult Delete(string contentId, int likeSum)
         {
-            if (!string.IsNullOrWhiteSpace(id))
+            if (!string.IsNullOrWhiteSpace(contentId))
             {
                 try
                 {
-                    TreeGALike gal = treeGALikeEX.GetList<TreeGALike>().Where(x => x.ID == id).FirstOrDefault();
+                    TreeGALike gal = treeGALikeEX.GetList<TreeGALike>().Where(x => x.ContentID == contentId&&x.LikeMan== GetCurrentU()).FirstOrDefault();
                     if (treeGALikeEX.Delete(gal) == Suc)
                     {
-
+                        //删除成功之后还需要修改点赞数
+                        TreeSay treeSay = _context.TreeSay.Where(x => x.ID == contentId).FirstOrDefault();
+                        if (treeSay != null)
+                        {
+                            treeSay.GiveLikeS = likeSum;
+                            _context.Entry(treeSay).State = EntityState.Modified;
+                            _context.SaveChanges();
+                        }
                         return Json(JsonHandler.CreateMessage(Suc, "删除成功"));
                     }
                     else

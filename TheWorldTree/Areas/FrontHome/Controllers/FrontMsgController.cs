@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using TheWorldTree.Controllers;
@@ -47,6 +48,8 @@ namespace TheWorldTree.Areas.FrontHome
             Redis.UpdateClientIPErrorNum(userIP);
             return Json(Suc);
         }
+
+       
 
     }
 }

@@ -27,6 +27,11 @@ namespace TheWorldTree.Models
         /// </summary>
         public List<TreeMsgBoard> TreeMsgBoards { get; set; }
 
+        /// <summary>
+        /// 点赞集合
+        /// </summary>
+        public List<TreeGALike>  TreeGALikes { get; set; }
+
 
     }
 }

@@ -8,6 +8,7 @@
     <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="~/css/main.css" rel="stylesheet" />
     <script src="~/lib/layui/layui.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!--加载meta IE兼容文件-->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -26,18 +27,18 @@
             </a>
         </h1>
         <div class="nav">
-            <a href="@Url.Action("Index","FrontHome")" class="active">文章</a>
-            <a href="whisper.html">微语</a>
+            <a href="@Url.Action("Index","FrontHome")">文章</a>
+            <a href="@Url.Action("Index","FrontSay")">微语</a>
             <a href="@Url.Action("Index","FrontMsg")">留言</a>
-            <a href="album.html">相册</a>
-            <a href="about.html">关于</a>
+            <a href="@Url.Action("Index","FrontAlbum")">相册</a>
+            @*<a href="about.html">关于</a>*@
         </div>
         <ul class="layui-nav header-down-nav">
-            <li class="layui-nav-item"><a href="@Url.Action("Index","FrontHome")" class="active">文章</a></li>
-            <li class="layui-nav-item"><a href="whisper.html">微语</a></li>
+            <li class="layui-nav-item"><a href="@Url.Action("Index","FrontHome")">文章</a></li>
+            <li class="layui-nav-item"><a href="@Url.Action("Index","FrontSay")">微语</a></li>
             <li class="layui-nav-item"><a href="@Url.Action("Index","FrontMsg")">留言</a></li>
-            <li class="layui-nav-item"><a href="album.html">相册</a></li>
-            <li class="layui-nav-item"><a href="about.html">关于</a></li>
+            <li class="layui-nav-item"><a href="@Url.Action("Index","FrontAlbum")">相册</a></li>
+            @*<li class="layui-nav-item"><a href="about.html">关于</a></li>*@
         </ul>
     </div>
 
@@ -63,11 +64,18 @@
         layui.config({
             base: '/js/'  // 根据你自己的目录设置
         });
-        layui.use(['element', 'laypage', 'jquery', 'menu'], function () {
-            element = layui.element, laypage = layui.laypage, $ = layui.$, menu = layui.menu;
+        layui.use(['element', 'laypage', 'jquery','layer', 'menu'], function () {
+            element = layui.element, laypage = layui.laypage, $ = layui.$, menu = layui.menu, layer = layui.layer;
             laypage.render({
                 elem: 'demo'
                 , count: sums  //数据总数，从服务端得到
+            });
+            layer.photos({
+                photos: '#layer-photos-demo'
+                , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                , tab: function (pic, layero) {
+                    console.log(pic, layero)
+                }
             });
             menu.init();
             menu.off();

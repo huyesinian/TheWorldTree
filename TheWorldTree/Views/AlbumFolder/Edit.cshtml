@@ -5,41 +5,43 @@
     Layout = "~/Views/Shared/_Layout_Edit.cshtml";
 }
 
-    <form class="layui-form" lay-filter="albumFolder">
-        @Html.HiddenFor(x => x.ID)
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                @Html.LabelLayuiFor(x => x.FlName)
-                <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.FlName, null, Model.FlName)
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                @Html.LabelLayuiFor(x => x.Describe)
-                <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Describe, null, Model.Describe)
-                </div>
-            </div>
-
-        </div>
-
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                @Html.LabelLayuiFor(x => x.Classify)
-                <div class="layui-input-block">
-                    @Html.EditorLayuiFor(x => x.Classify, null, Model.Classify)
-                </div>
-            </div>
-
-        </div>
-        <div class="layui-form-item">
+<form class="layui-form" lay-filter="albumFolder">
+    @Html.HiddenFor(x => x.ID)
+    @Html.HiddenFor(x => x.UpdateOne)
+    @Html.HiddenFor(x => x.UpdateTime)
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.FlName)
             <div class="layui-input-block">
-                <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+                @Html.EditorLayuiFor(x => x.FlName, null, Model.FlName)
             </div>
         </div>
-    </form>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Describe)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Describe, null, Model.Describe)
+            </div>
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            @Html.LabelLayuiFor(x => x.Classify)
+            <div class="layui-input-block">
+                @Html.EditorLayuiFor(x => x.Classify, null, Model.Classify)
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <a class="layui-btn" lay-submit lay-filter="*">立即提交</a>
+        </div>
+    </div>
+</form>
     <script>
     layui.use(['layer', 'layedit', 'form','element'], function () {
         var form = layui.form;

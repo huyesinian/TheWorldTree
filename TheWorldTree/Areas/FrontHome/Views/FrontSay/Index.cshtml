@@ -1,4 +1,5 @@
 ﻿@model TheWorldTree.Models.TreeMsgBoard
+@using TheWorldTree.Models;
 @using TheWorldTree.HtmlExtension;
 @{
     ViewData["Title"] = "说说";
@@ -25,9 +26,21 @@
                                 }
                             </div>
                             <div class="op-list">
+                                <input name="SayId" type="hidden" value="@item.TreeSays.ID">
+                                @{
+                                    List<TreeGALike> TreeGALikes = item.TreeGALikes;
+                                    var user = ViewBag.User;
+                                    var sums = TreeGALikes.Where(x => x.LikeMan.Contains(user)).Count();
+                                    if (sums>0)
+                                    {
 
-                                <p class="like"><i class="layui-icon layui-icon-praise"></i><span>@item.TreeSays.GiveLikeS</span></p>
-
+                                        <p class="like active" off="true"><i class="layui-icon layui-icon-praise"></i><span>@item.TreeSays.GiveLikeS</span></p>
+                                    }
+                                    else
+                                    {
+                                        <p class="like"><i class="layui-icon layui-icon-praise"></i><span>@item.TreeSays.GiveLikeS</span></p>
+                                    }
+                                }
                                 <p class="edit"><i class="layui-icon layui-icon-reply-fill"></i><span>@item.TreeSays.CommentS</span></p>
                                 <p class="off"><span>展开</span><i class="layui-icon layui-icon-down"></i></p>
                             </div>
@@ -39,7 +52,9 @@
                                     <form class="layui-form" action="">
                                         <div class="layui-form-item layui-form-text">
                                             <div class="layui-input-block">
-                                                @Html.TextareaLayuiFor(x => x.MsgContent, null, null, new { placeholder = "既然来了，就说几句" })
+                                                <input name="SayContentId" type="hidden" value="@item.TreeSays.ID">
+                                                <input name="SayUser" type="hidden" value="@ViewBag.User">
+                                                <textarea name="desc" class="layui-textarea"></textarea>
                                             </div>
                                         </div>
                                         <div class="layui-form-item">
@@ -69,7 +84,7 @@
                     </div>
                 }
 
-              
+
             </div>
             <div id="demo" style="text-align: center;"></div>
         </div>

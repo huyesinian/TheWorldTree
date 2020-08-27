@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TheWorldTree.Controllers;
 using TheWorldTree.Data;
 using TheWorldTree.Models;
@@ -24,10 +25,12 @@ namespace TheWorldTree.Areas.FrontHome.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.User = GetCurrentU();
             var SaySynthesize = (from s in _context.TreeSay 
                                  select new { TreeSays=s
                                  , TreeFileInfos = _context.TreeFileInfo.Where(x=>x.ContentID==s.ID).ToList()
-                                 , TreeMsgBoards = _context.TreeMsgBoard.Where(x=>x.ContentId==s.ID).ToList() 
+                                 , TreeMsgBoards = _context.TreeMsgBoard.Where(x=>x.ContentId==s.ID).ToList()
+                                 ,TreeGAlikes = _context.TreeGALike.Where(x => x.ContentID == s.ID).ToList()
                                  }).ToList();
             List<TreeFrontSay> SaysList = new List<TreeFrontSay>();
             if (SaySynthesize.Count>0)
@@ -38,11 +41,13 @@ namespace TheWorldTree.Areas.FrontHome.Controllers
                     { 
                         TreeSays=item.TreeSays,
                         TreeFileInfos=item.TreeFileInfos,
-                        TreeMsgBoards=item.TreeMsgBoards
+                        TreeMsgBoards=item.TreeMsgBoards,
+                        TreeGALikes=item.TreeGAlikes,
                     };
                     SaysList.Add(treeFrontSay);
                 }
             }
+
             ViewBag.TreeForntSays = SaysList;
             ViewBag.ContentSums = SaysList.Count();
             TreeMsgBoard treeMsgBoard = new TreeMsgBoard()
@@ -66,6 +71,32 @@ namespace TheWorldTree.Areas.FrontHome.Controllers
             _context.Add(treeMsgBoard);
             _context.SaveChanges();
             Redis.UpdateClientIPErrorNum(userIP);
+            return Json(Suc);
+        }
+
+        /// <summary>
+        /// 关于提交其他留言板的相关信息
+        /// </summary>
+        /// <param name="contentId">关联id</param>
+        /// <param name="user">留言人</param>
+        /// <param name="msg">留言信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult OtherMsgBoard(string contentId, string user, string msg)
+        {
+            TreeMsgBoard treeMsgBoard = new TreeMsgBoard()
+            {
+                ID = Guid.NewGuid().ToString(),
+                ContentId = contentId,
+                MsgContent = msg,
+                CreateTime = DateTime.Now,
+                Creater = user
+            };
+            var treeSay = _context.TreeSay.Where(x => x.ID == contentId).FirstOrDefault();
+            treeSay.CommentS += 1;
+            _context.Entry(treeSay).State = EntityState.Modified;
+            _context.Add(treeMsgBoard);
+            _context.SaveChanges();
             return Json(Suc);
         }
     }
