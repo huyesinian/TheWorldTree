@@ -12,15 +12,17 @@ namespace TheWorldTree.Areas.FrontHome.Controllers
     [Area("FrontHome")]
     public class FrontAlbumController : BaseController
     {
-
+        public RubbishSel Rubbish;
         public TheWorldTreeDBContext _context;
 
         public FrontAlbumController(TheWorldTreeDBContext context)
         {
+            Rubbish = new RubbishSel(context);
             _context = context;
         }
         public IActionResult Index()
         {
+            Rubbish.RecordUId(GetCurrentU());
             var AlbumSynthesize = (from s in _context.TreeAlbumFolder
                                    select new
                                    {

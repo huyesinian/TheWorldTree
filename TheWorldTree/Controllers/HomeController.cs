@@ -30,25 +30,10 @@ namespace TheWorldTree.Controllers
 
         public IActionResult Index()
         {
-            ///将用户IP信息记录到数据库中
-            string uIP = HttpContext.Session.GetString("CurrentUser");
-            //判断这个用户是不是当天登陆过
-            var uCount = _context.TreeIPInfo.Where(x => x.IPAdd == uIP &&x.IPAccessTime.Date==DateTime.Now.Date).Count();
+           
             try
             {
-                //
-                if (uCount<1)
-                {
-                    var treeIPInfo = new TreeIPInfo
-                    {
-                        ID = Guid.NewGuid().ToString(),
-                        IPAccessTime = DateTime.Now,
-                        IPAdd = uIP
-                    };
-
-                    _context.Add(treeIPInfo);
-                    _context.SaveChangesAsync();
-                }
+               
                 var Article = _context.TreePress.ToList();//获取文章
                 ViewBag.Articles = Article.Count();//文章数
                 ViewBag.PubArticle = Article.Where(x => x.Issue == "1").ToList();//已发表文章
@@ -63,10 +48,6 @@ namespace TheWorldTree.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -143,7 +143,7 @@ namespace TheWorldTree.EXMethod
                 ms.Close();
                 return Convert.ToBase64String(arr);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -165,7 +165,7 @@ namespace TheWorldTree.EXMethod
                 ms.Close();
                 return bmp;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

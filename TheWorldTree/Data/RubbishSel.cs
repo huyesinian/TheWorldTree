@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiceStack;
+using TheWorldTree.Controllers;
 using TheWorldTree.Interface;
 using TheWorldTree.Models;
 
@@ -171,6 +172,31 @@ namespace TheWorldTree.Data
                 url = uri2.MakeRelativeUri(uri1).ToString().Substring(uri2.MakeRelativeUri(uri1).ToString().IndexOf("ThumFileSave"));
             }
             return url;
+        }
+
+        /// <summary>
+        /// 记录访问id
+        /// </summary>
+        public void RecordUId(string uip)
+        {
+            ///将用户IP信息记录到数据库中
+            string uIP = uip;
+            //判断这个用户是不是当天登陆过
+            var uCount = _context.TreeIPInfo.Where(x => x.IPAdd == uIP && x.IPAccessTime.Date == DateTime.Now.Date).Count();
+            //
+            if (uCount < 1)
+            {
+                var treeIPInfo = new TreeIPInfo
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    IPAccessTime = DateTime.Now,
+                    IPAdd = uIP
+                };
+
+                _context.Add(treeIPInfo);
+                _context.SaveChangesAsync();
+            }
+            return;
         }
     }
 }

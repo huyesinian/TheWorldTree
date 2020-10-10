@@ -14,17 +14,20 @@ namespace TheWorldTree.Areas.FrontHome
     [Area("FrontHome")]
     public class FrontMsgController : BaseController
     {
+        public RubbishSel Rubbish;
         public TheWorldTreeDBContext _context;
 
         public FrontMsgController(TheWorldTreeDBContext context)
         {
+            Rubbish = new RubbishSel(context);
             _context = context;
         }
         public IActionResult Index()
         {
+            Rubbish.RecordUId(GetCurrentU());
             var MsgList = _context.TreeMsgBoard.Where(x => x.ContentId == null).OrderByDescending(x => x.CreateTime).ToList();
             ViewBag.Msgs = MsgList;
-            ViewBag.ContentSums = MsgList.Count();
+            ViewBag.ContentSums = MsgList.Count;
             TreeMsgBoard treeMsgBoard = new TreeMsgBoard()
             {
                 ID = Guid.NewGuid().ToString()

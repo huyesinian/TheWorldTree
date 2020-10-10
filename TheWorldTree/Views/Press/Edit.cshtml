@@ -7,6 +7,8 @@
 
 <form class="layui-form" lay-filter="press">
     @Html.HiddenFor(x => x.ID)
+    @Html.HiddenFor(x => x.Creater)
+    @Html.HiddenFor(x => x.CreateTime)
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="button" class="layui-btn" id="FirstImg">

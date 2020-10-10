@@ -14,6 +14,7 @@ namespace TheWorldTree.Controllers
     /// </summary>
     public class BaseController : Controller
     {
+       
         /// <summary>
         /// 成功
         /// </summary>
@@ -56,6 +57,10 @@ namespace TheWorldTree.Controllers
             return;
 
         }
+
+        
+
+
 
     }
 }

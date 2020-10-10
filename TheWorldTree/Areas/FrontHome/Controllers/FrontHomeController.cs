@@ -14,16 +14,19 @@ namespace TheWorldTree.Areas.FrontHome
     [Area("FrontHome")]
     public class FrontHomeController : BaseController
     {
+        public RubbishSel Rubbish;
         public TreeFileInfoEX treeFileInfoEX;
         public TheWorldTreeDBContext _context;
 
         public FrontHomeController(TheWorldTreeDBContext context)
         {
+            Rubbish = new RubbishSel(context);
             treeFileInfoEX = new TreeFileInfoEX(context);
             _context = context;
         }
         public IActionResult Index()
         {
+            Rubbish.RecordUId(GetCurrentU());
             var Content= _context.TreePress.Where(x => x.Issue == "1").ToList();
             ViewBag.ContentHome = Content;
             ViewBag.ContentSums = Content.Count();
